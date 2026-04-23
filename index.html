@@ -1,1 +1,136 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fanter Clicker</title>
+<style>
+:root{--blue:#2a5877;--blue2:#1c4059;--panel:#23313d;--wood:#8b5a2b;--wood2:#6d4520;--text:#f1e7d4;--dim:#d0c0ad;--gold:#ffd56a;--shadow:0 8px 24px rgba(0,0,0,.35)}
+*{box-sizing:border-box;margin:0;padding:0} html,body{width:100%;height:100%;overflow:hidden;font-family:Georgia,'Times New Roman',serif;background:#0d1a24;color:var(--text)}
+body{user-select:none} #game{display:grid;grid-template-columns:320px 1fr 310px;width:100%;height:100%}
+.panel{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--blue) 0%,var(--blue2) 100%)}
+.panel::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 22%, rgba(255,255,255,.22), transparent 28%), radial-gradient(circle at 50% 55%, rgba(255,255,255,.07), transparent 40%);pointer-events:none}
+.wood{box-shadow:inset 0 0 0 2px rgba(255,255,255,.03), inset 0 0 0 8px rgba(0,0,0,.12)}
+#left{border-right:8px solid var(--wood);box-shadow:inset -1px 0 0 rgba(255,255,255,.08)}
+#center{border-left:2px solid rgba(255,255,255,.08);border-right:2px solid rgba(255,255,255,.08)}
+#right{border-left:8px solid var(--wood);box-shadow:inset 1px 0 0 rgba(255,255,255,.08)}
+.header{padding:12px 14px;background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.1));border-bottom:1px solid rgba(255,255,255,.08);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.header h1,.header h2{font-size:18px;font-weight:700;color:#fff;letter-spacing:.5px}
+.header .sub{font-size:11px;color:#eee;opacity:.92;margin-top:2px}
+#hud{padding:12px 16px 10px;text-align:center;background:linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,.08));border-bottom:1px solid rgba(255,255,255,.08)}
+#title{font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.45)}
+#count{font-size:34px;font-weight:700;color:#fff;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.45)}
+#label{font-size:12px;color:var(--dim)}
+#stats{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--dim)} #stats span{color:var(--gold)}
+#rank{position:absolute;top:12px;right:12px;background:linear-gradient(180deg,#4f3821,#24170f);border:1px solid rgba(255,255,255,.12);padding:5px 10px;border-radius:999px;font-size:10px;font-weight:700;box-shadow:var(--shadow)}
+#ticker{height:24px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#f5ebdb;background:rgba(0,0,0,.24);border-bottom:1px solid rgba(255,255,255,.08);white-space:nowrap;overflow:hidden}
+#clickzone{position:relative;height:calc(100% - 104px);display:flex;align-items:center;justify-content:flex-start;padding-left:22px}
+#fanterwrap{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:360px;height:360px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#glow{position:absolute;width:370px;height:370px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,255,.55) 0%, rgba(255,255,255,.22) 18%, rgba(255,255,255,.08) 33%, transparent 68%);filter:blur(.3px)}
+#fanter{width:285px;height:285px;border-radius:50%;object-fit:cover;filter:drop-shadow(0 0 18px rgba(255,255,255,.25));transition:transform .08s, filter .08s;animation:float 3s ease-in-out infinite}
+#fanter:active,#fanter.clicking{transform:scale(.92)!important;animation:none}
+#mood{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:12px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7)}
+#combo{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);width:220px;text-align:center}
+#barbg{height:7px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#ff9c2f,#ffe08d);transition:width .08s}
+#bartext{margin-top:4px;font-size:11px;color:#ffe08d;min-height:15px;opacity:0;transition:.2s;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+#pool{position:absolute;left:0;right:0;bottom:0;height:90px;pointer-events:none;opacity:.28}
+#poolliq{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,180,70,.22),rgba(160,52,0,.4));transition:height 1s}
+#poollabel,#pooltier{position:absolute;left:50%;transform:translateX(-50%);color:#f8edd8;text-shadow:0 1px 2px rgba(0,0,0,.7)}
+#poollabel{bottom:8px;font-size:10px} #pooltier{bottom:24px;font-size:9px;font-style:italic}
+.sidehead{padding:12px 14px;background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.12));border-bottom:1px solid rgba(255,255,255,.08)}
+.sidehead h2{font-size:18px;color:#fff}
+.sidehead .sub{font-size:11px;color:#f1e7d4;opacity:.9;margin-top:2px}
+.section{padding:10px} .section-title{font-size:11px;color:#f5ebdb;opacity:.95;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
+.list{display:flex;flex-direction:column;gap:8px;max-height:30vh;overflow:auto;padding-right:4px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.14));border:1px solid rgba(255,255,255,.16);border-radius:0;padding:10px;cursor:pointer;transition:.15s;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 1px 0 rgba(0,0,0,.18)}
+.card:hover:not(.locked){transform:translateX(2px);border-color:#fff}
+.locked{opacity:.38;cursor:not-allowed} .owned{border-color:#f1d28f;background:linear-gradient(180deg, rgba(255,238,187,.22), rgba(0,0,0,.12))}
+.name{font-weight:700;color:#fff;font-size:12px;text-shadow:0 1px 2px rgba(0,0,0,.65)} .desc{font-size:9px;color:#f0e6d3;margin-top:3px;line-height:1.3;text-shadow:0 1px 1px rgba(0,0,0,.35)} .cost{font-size:10px;color:#ffe08d;margin-top:5px;font-weight:700;text-shadow:0 1px 1px rgba(0,0,0,.35)}
+.tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.14)} .tabbtn{flex:1;padding:9px 4px;background:linear-gradient(180deg,#39291f,#1d140f);border:none;color:#fff;font-size:10px;font-weight:700;cursor:pointer;border-right:1px solid rgba(255,255,255,.08)} .tabbtn.active{background:linear-gradient(180deg,#5a4028,#2b1a10)}
+.tab{display:none;flex:1;overflow:auto} .tab.active{display:flex;flex-direction:column}
+#ach{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ach{padding:8px} .ach.locked .an,.ach.locked .ai{opacity:.2} .ach.unlocked{border-color:#ffe08d;background:linear-gradient(180deg, rgba(255,238,187,.25), rgba(0,0,0,.12))} .ai{display:block;text-align:center;font-size:16px;margin-bottom:3px} .an{text-align:center;font-size:9px;font-weight:700;color:#ffe08d} .ad{text-align:center;font-size:8px;color:#f0e6d3;line-height:1.2}
+#statsbox,#prestige{padding:10px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;justify-content:space-between;padding:8px 10px;background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(0,0,0,.12));border:1px solid rgba(255,255,255,.14);border-radius:0;font-size:11px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)} .lab{color:#f0e6d3} .val{color:#ffe08d;font-weight:700}
+button.main{border:none;border-radius:0;padding:11px 12px;font-weight:700;cursor:pointer;color:#fff;background:linear-gradient(180deg,#5b4127,#2d1c10);border:1px solid rgba(255,255,255,.15)} button.main:hover{filter:brightness(1.08)} button.main:disabled{opacity:.45;cursor:not-allowed}
+#submodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center} #submodal.open{display:flex}
+#subbox{width:min(760px,94vw);max-height:82vh;overflow:hidden;background:linear-gradient(180deg,#2a6e95,#1c4059);border:8px solid var(--wood);border-radius:0;box-shadow:var(--shadow);display:flex;flex-direction:column}
+#subhead{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.12))} #subtitle{font-size:14px;color:#fff;font-weight:700} #subclose{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+#sublist{padding:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow:auto}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#2b1a10;border:1px solid #ffe08d;border-radius:0;padding:8px 14px;font-size:12px;z-index:90;animation:in .25s ease, out .25s ease 2.2s forwards;box-shadow:var(--shadow)}
+@keyframes in{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}} @keyframes out{to{opacity:0}} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+*::-webkit-scrollbar{width:6px} *::-webkit-scrollbar-track{background:#0f1820} *::-webkit-scrollbar-thumb{background:#8b5a2b;border-radius:999px}
+canvas{position:fixed;inset:0;pointer-events:none} #grid{z-index:0;opacity:.18} #particles{z-index:10}
+</style>
+</head>
+<body>
+<canvas id="grid"></canvas><canvas id="particles"></canvas>
+<div id="submodal"><div id="subbox"><div id="subhead"><div id="subtitle">⚗️ Sub-Upgrades</div><button id="subclose">✕</button></div><div id="sublist"></div></div></div>
+<div id="game">
+<div id="left" class="panel wood">
+  <div class="header"><h1>Fanter's bakery</h1><div class="sub">0 pints per second : 0</div></div>
+  <div id="clickzone"><div id="fanterwrap"><div id="glow"></div><div id="mood">😐 Fanter watches...</div><img id="fanter" src="https://www.image2url.com/r2/default/images/1776951558139-c4f34828-87ab-441f-b1df-8e035db4c14f.png" alt="Fanter Cat"></div><div id="combo"><div id="barbg"><div id="bar"></div></div><div id="bartext"></div></div></div>
+  <div id="pool"><div id="poolliq"></div><div id="pooltier"></div><div id="poollabel">Fanter Farming</div></div>
+</div>
+<div id="center" class="panel wood">
+  <div id="hud"><div id="title">Fanter Clicker</div><div id="count">0</div><div id="label">Orange Pints</div><div id="stats"><div>PPS: <span id="pps">0</span></div><div>Per Click: <span id="ppc">1</span></div><div>Clicks: <span id="clicks">0</span></div></div><div id="rank">Fanter Peasant</div></div>
+  <div id="ticker">Loading...</div>
+</div>
+<div id="right" class="panel wood">
+  <div class="sidehead"><h2>Store</h2><div class="sub">Buy 1 • 10 • 100</div></div>
+  <div class="tabs"><button class="tabbtn active" data-tab="ach">🏆 Achiev.</button><button class="tabbtn" data-tab="stats">📊 Stats</button><button class="tabbtn" data-tab="prestige">⭐ Prestige</button></div>
+  <div class="tab active" id="tab-ach"><div id="ach"></div></div>
+  <div class="tab" id="tab-stats"><div id="statsbox"></div></div>
+  <div class="tab" id="tab-prestige"><div id="prestige"><div class="row"><div class="lab">Ascension</div><div class="val" id="ascText">0</div></div><button class="main" id="ascend" disabled>✦ ASCEND ✦</button><button class="main" id="subopen">⚗️ Open Sub-Upgrades</button></div></div>
+</div>
+</div>
+  <script>
+const STORE='FANTER_CLICKER_SAVE_V4';
+const mainUpgrades = [];
+const buildings = [
+{n:'Eye Dropper',d:'Slowly drip pints.',c:15,p:0.1},{n:'Paw Press',d:'Press pints from paws.',c:100,p:0.5},{n:'Fang Tap',d:'Puncture a barrel of blood.',c:500,p:2},{n:'Blood Jug',d:'Collect spilled pints.',c:2000,p:8},{n:'Clot Farm',d:'Harvest coagulated pints.',c:8000,p:25},{n:'Fanter Mill',d:'Grind fur for blood.',c:30000,p:80},{n:'Blood Oven',d:'Bake concentrated pints.',c:100000,p:250},{n:'Cat Lab Alpha',d:'Scientific pint synthesis.',c:400000,p:700},{n:'Pint Vault',d:'Pressurized extraction.',c:1500000,p:2000},{n:'Fanter Portal',d:'Pints from another dimension.',c:6000000,p:6000},{n:'Blood Star',d:'Stellar pint fusion.',c:25000000,p:18000},{n:'Fanter Core',d:'Planetary blood extraction.',c:100000000,p:55000},{n:'Quantum Pinter',d:'Quantum tunneling.',c:400000000,p:160000},{n:'Blood God Shrine',d:'Offerings to the gods.',c:2000000000,p:500000},{n:'Fanter Universe',d:'Entire universes of pints.',c:10000000000,p:1600000}
+];
+for(let i=0;i<20;i++) mainUpgrades.push({type:'ppc',name:['Bloody Paw','Fanged Bite','Clawed Fury','Crimson Scratch','Pint Squeezer','Blood Fang','Iron Claw','Venom Strike','Gore Rake','Fanter Rage','Blood Surge','Scarlet Fist','Fanter Fist II','Pint Barrage','Hyper Claw','Crimson Nova','Void Scratch','Quantum Bite','Solar Fanter','Galaxy Claw'][i],desc:'Improves click power.',cost:Math.round(10*Math.pow(1.8,i+1)),ppc:1+i});
+let bi=0;
+for(const b of buildings){for(let lvl=1;lvl<=11;lvl++){mainUpgrades.push({type:'pps',name:`${b.n} Lv.${lvl}`,desc:b.d,cost:Math.round(b.c*Math.pow(1.55,lvl-1)*Math.pow(1.08,bi)),pps:Math.max(0.1,b.p*Math.pow(1.35,lvl-1)),building:b.n,level:lvl}); if(mainUpgrades.length>=180) break;} bi++; if(mainUpgrades.length>=180) break;}
+while(mainUpgrades.length<180){let i=mainUpgrades.length+1; mainUpgrades.push({type:'pps',name:`Bonus Cat ${i}`,desc:'Extra passive production.',cost:Math.round(1000*Math.pow(1.45,i-20)),pps:100+i,building:'Bonus',level:1});}
+const subUpgrades=[]; for(let i=0;i<143;i++) subUpgrades.push({name:`Sub Cat ${i+1}`,desc:'Supports production.',cost:Math.round(25*Math.pow(1.33,i+1))});
+const achData=[
+{i:'🥉',n:'First Pint',d:'Earn 100 pints',r:100},
+{i:'🥈',n:'Pint Hoarder',d:'Earn 10K pints',r:10000},
+{i:'🥇',n:'Orange Empire',d:'Earn 1M pints',r:1000000},
+{i:'💎',n:'Pint Overlord',d:'Earn 100M pints',r:100000000},
+{i:'🏆',n:'Upgrade Collector',d:'Buy 25 upgrades',r:25,kind:'up'},
+{i:'👑',n:'Fanter Lord',d:'Buy 50 upgrades',r:50,kind:'up'},
+{i:'🐾',n:'Auto Paw',d:'Unlock Auto Paw',r:1,kind:'sp'},
+{i:'🌙',n:'Sugar Rush',d:'Collect 10 sugar lumps',r:10,kind:'sl'}
+];
+let S={p:0,tp:0,c:0,ppc:1,pps:0,asc:0,pm:1,sl:0,sp:0,combo:0,cm:1,lastClick:0,owned:[],subOwned:[],l:Date.now()};
+const el=id=>document.getElementById(id);
+function save(){localStorage.setItem(STORE,JSON.stringify(S))}
+function load(){try{const x=JSON.parse(localStorage.getItem(STORE)||'null');if(x)S=Object.assign(S,x)}catch(e){}}
+function fmt(n){return n>=1e12?(n/1e12).toFixed(2)+'T':n>=1e9?(n/1e9).toFixed(2)+'B':n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':Math.floor(n).toString()}
+function ppc(){return S.ppc*S.pm*S.cm}
+function pps(){return (S.pps + S.sp)*S.pm}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2500)}
+function canMain(u){return S.p>=u.cost*.75}
+function canSub(u){return S.p>=u.cost*.5}
+function ownedUpgrades(){return S.owned.length}
+function renderPanels(){const main=el('mainpanel'), sub=el('subpanel'); main.innerHTML=''; sub.innerHTML=''; mainUpgrades.forEach((u,i)=>{if(S.owned.includes(i)||!canMain(u)) return; const d=document.createElement('div'); d.className='card'; d.innerHTML=`<div class="name">${u.name}</div><div class="desc">${u.desc}</div><div class="cost">${fmt(u.cost)} Pints</div>`; d.onclick=()=>buyMain(i); main.appendChild(d)}); if(!main.children.length) main.innerHTML='<div class="card locked"><div class="name">Locked</div><div class="desc">Reach 75% of a main upgrade cost to reveal it.</div></div>'; subUpgrades.forEach((u,i)=>{if(S.subOwned.includes(i)||!canSub(u)) return; const d=document.createElement('div'); d.className='card'; d.innerHTML=`<div class="name">${u.name}</div><div class="desc">${u.desc}</div><div class="cost">${fmt(u.cost)} Pints</div>`; d.onclick=()=>buySub(i); sub.appendChild(d)}); if(!sub.children.length) sub.innerHTML='<div class="card locked"><div class="name">Locked</div><div class="desc">Reach 50% of a sub-upgrade cost to reveal it.</div></div>'}
+function renderSubModal(){const x=el('sublist'); x.innerHTML=''; subUpgrades.forEach((u,i)=>{const ok=canSub(u); const d=document.createElement('div'); d.className='card '+(S.subOwned.includes(i)?'owned':ok?'':'locked'); d.innerHTML=`<div class="name">${u.name}</div><div class="desc">${u.desc}</div><div class="cost">${S.subOwned.includes(i)?'Owned':fmt(u.cost)+' Pints'}</div>`; if(ok&&!S.subOwned.includes(i)) d.onclick=()=>buySub(i); x.appendChild(d)})}
+function renderAch(){const x=el('ach'); x.innerHTML=''; achData.forEach(a=>{const ok=a.kind==='up'?(S.owned.length>=a.r):a.kind==='sp'?(S.sp>=1):a.kind==='sl'?(S.sl>=a.r):(S.tp>=a.r); const d=document.createElement('div'); d.className='card ach '+(ok?'unlocked':'locked'); d.innerHTML=`<span class="ai">${a.i}</span><div class="an">${a.n}</div><div class="ad">${a.d}</div>`; x.appendChild(d)})}
+function renderStats(){el('statsbox').innerHTML=`<div class="row"><div class="lab">Total Pints Earned</div><div class="val">${fmt(S.tp)}</div></div><div class="row"><div class="lab">Current Pints</div><div class="val">${fmt(S.p)}</div></div><div class="row"><div class="lab">Sugar Lumps</div><div class="val">${S.sl}</div></div><div class="row"><div class="lab">Fanter Farming</div><div class="val">${fmt(S.sp)}/s</div></div><div class="row"><div class="lab">Ascensions</div><div class="val">${S.asc}</div></div><div class="row"><div class="lab">Upgrades Bought</div><div class="val">${S.owned.length}</div></div>`}
+function updateHUD(){el('count').textContent=fmt(S.p); el('ppc').textContent=fmt(ppc()); el('pps').textContent=fmt(pps()); el('clicks').textContent=S.c; el('ascText').textContent=`Ascensions: ${S.asc} | Bonus +${S.asc*10}%`; el('ascend').disabled=S.tp<1e9; el('poolliq').style.height=Math.min(100,Math.floor(S.tp/1e8*100))+'%'; el('pooltier').textContent=S.tp<1e5?'Seedling':S.tp<1e7?'Growing':S.tp<1e9?'Blooming':'Overflowing'; el('bar').style.width=Math.min(100,S.combo*10)+'%'; el('bartext').style.opacity=S.combo?1:0; el('bartext').textContent=S.combo?`${S.combo}x Combo`:''; el('rank').textContent=S.tp<1000?'Fanter Peasant':S.tp<100000?'Pint Taster':S.tp<10000000?'Cat Baron':S.tp<1000000000?'Crimson King':'Orange Deity'}
+function updateAll(){renderPanels(); renderSubModal(); renderAch(); renderStats(); updateHUD(); save()}
+function buyMain(i){const u=mainUpgrades[i]; if(S.owned.includes(i)||S.p<u.cost) return; S.p-=u.cost; S.owned.push(i); if(u.type==='ppc') S.ppc += u.ppc*0.2; else S.pps += u.pps; if(i===20) S.sp += 1; if((i+1)%12===0) S.sl += 1; toast('Purchased '+u.name); updateAll()}
+function buySub(i){const u=subUpgrades[i]; if(S.subOwned.includes(i)||S.p<u.cost) return; S.p-=u.cost; S.subOwned.push(i); if(i%3===0) S.ppc*=1.02; else if(i%3===1) S.pps+=.5; else S.pm*=1.01; if(i===0) S.sp += 1; toast('Unlocked '+u.name); updateAll()}
+function clickFanter(e){S.c++; S.combo=Math.min(10,S.combo+1); S.cm=1+S.combo*.05; const gain=Math.max(1,Math.floor(ppc()*S.cm)); S.p+=gain; S.tp+=gain; S.lastClick=Date.now(); fanter.classList.add('clicking'); setTimeout(()=>fanter.classList.remove('clicking'),80); mood.textContent=gain>25?'😼 Big Slap!':'😺 Fanter approves!'; burst(e.clientX,e.clientY); updateAll()}
+function ascension(){if(S.tp<1e9) return; S.p=0; S.ppc=1; S.pps=0; S.combo=0; S.cm=1; S.asc++; S.pm=1+S.asc*.1; S.owned=[]; S.subOwned=[]; S.sp=Math.max(0,Math.floor(S.sp*.25)); S.sl=0; toast('Ascended!'); updateAll()}
+function loadElapsed(){const now=Date.now(); const diff=Math.max(0,Math.floor((now-S.l)/1000)); if(diff>0){S.p+=pps()*diff; S.tp+=pps()*diff; S.l=now}}
+const pc=el('particles'), ctx=pc.getContext('2d'), gc=el('grid'), gctx=gc.getContext('2d'); let P=[]; function resize(){pc.width=innerWidth; pc.height=innerHeight; gc.width=innerWidth; gc.height=innerHeight} function drawGrid(){gctx.clearRect(0,0,gc.width,gc.height); gctx.strokeStyle='rgba(255,255,255,.05)'; for(let x=0;x<gc.width;x+=40){gctx.beginPath();gctx.moveTo(x,0);gctx.lineTo(x,gc.height);gctx.stroke()} for(let y=0;y<gc.height;y+=40){gctx.beginPath();gctx.moveTo(0,y);gctx.lineTo(gc.width,y);gctx.stroke()}} function burst(x,y){for(let i=0;i<10;i++)P.push({x,y,vx:(Math.random()-.5)*6,vy:(Math.random()-.5)*6,r:2+Math.random()*3,a:1})} function anim(){ctx.clearRect(0,0,pc.width,pc.height);P=P.filter(p=>p.a>.03);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.a*=.95;ctx.fillStyle=`rgba(255,220,150,${p.a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(anim)}
+function tick(){S.p+=pps(); S.tp+=pps(); if(S.combo>0 && Date.now()-S.lastClick>2500){S.combo=0;S.cm=1; mood.textContent='😐 Fanter watches...'} if(Math.random()<.2) S.sl=Math.min(9999,S.sl+1); if(S.sl>=25) S.sp=Math.max(S.sp,1); updateAll()}
+load(); loadElapsed(); resize(); drawGrid(); anim(); updateAll(); setInterval(tick,1000); setInterval(save,5000); window.addEventListener('resize',()=>{resize(); drawGrid()}); fanter.addEventListener('click',clickFanter); el('ascend').onclick=ascension; el('subopen').onclick=()=>{submodal.classList.add('open'); renderSubModal()}; el('subclose').onclick=()=>submodal.classList.remove('open'); submodal.addEventListener('click',e=>{if(e.target.id==='submodal') submodal.classList.remove('open')}); document.querySelectorAll('.tabbtn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); el('tab-'+b.dataset.tab).classList.add('active')}); el('ticker').textContent='Cookie-style layout, local saves, sugar lumps, ascension, Fanter Farming, and Auto Paw are all active.';
+</script>
+</body>
+</html>
