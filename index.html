@@ -6,39 +6,32 @@
 <title>Fanter Clicker</title>
 <style>
 :root{
-  --bg:#140d09;
-  --panel:#2a1a12;
-  --panel2:#342014;
-  --panel3:#442a18;
-  --wood:#7c4f28;
-  --wood2:#5a371b;
-  --cookie:#d9b17a;
+  --bg:#0d1a24;
+  --panel:#213241;
+  --panel2:#2d4152;
+  --panel3:#324d63;
+  --blue:#2b5a7a;
+  --blue2:#18354a;
+  --wood:#8b5a2b;
+  --wood2:#6c441f;
+  --cookie:#d8b07a;
   --cookie2:#f1d0a1;
   --cream:#f6ead7;
   --gold:#ffd56a;
   --gold2:#ffb84d;
-  --blue:#2b566d;
-  --green:#3f6d4e;
-  --purple:#5f4b7a;
-  --red:#7a3f3f;
   --shadow:0 10px 30px rgba(0,0,0,.42);
   --line:rgba(255,255,255,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;font-family:Georgia,'Times New Roman',serif;background:radial-gradient(circle at 50% 20%, #2b1a10 0%, #140d09 50%, #090604 100%);color:var(--cream)}
+html,body{width:100%;height:100%;overflow:hidden;font-family:Georgia,'Times New Roman',serif;background:radial-gradient(circle at 50% 20%, #173345 0%, #0d1a24 56%, #081018 100%);color:var(--cream)}
 body{user-select:none}
-#game{
-  display:grid;
-  grid-template-columns:260px 1fr 430px;
-  width:100%;
-  height:100%
-}
+#game{display:grid;grid-template-columns:330px 1fr 360px;width:100%;height:100%}
 .panel{
   position:relative;overflow:hidden;
   background:
-    radial-gradient(circle at 20% 15%, rgba(255,255,255,.05), transparent 16%),
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,.07), transparent 16%),
     radial-gradient(circle at 85% 20%, rgba(255,255,255,.03), transparent 18%),
-    linear-gradient(180deg, var(--panel2) 0%, var(--panel) 100%);
+    linear-gradient(180deg, var(--panel3) 0%, var(--panel) 100%);
 }
 .panel::before{
   content:'';
@@ -66,10 +59,7 @@ body{user-select:none}
 }
 #title{font-size:22px}
 #count{font-size:36px;font-weight:700;color:#fff;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.5)}
-#stats{
-  display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
-  margin-top:7px;font-size:11px;color:#e2d2bc
-}
+#stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:#e2d2bc}
 #stats span{color:var(--gold)}
 #rank{
   position:absolute;top:12px;right:12px;
@@ -83,22 +73,22 @@ body{user-select:none}
   border-bottom:1px solid rgba(255,255,255,.08);
   white-space:nowrap;overflow:hidden
 }
-#clickzone{
-  position:relative;height:calc(100% - 100px);
-  display:flex;align-items:center;justify-content:center;padding:12px
-}
 #infoTop{
   padding:12px 14px 8px;
   background:linear-gradient(180deg, rgba(18,11,7,.55), rgba(18,11,7,.1));
   border-bottom:1px solid rgba(255,255,255,.06)
 }
-#infoTop .row{
+#infoTop .row,.row{
   display:flex;justify-content:space-between;padding:8px 10px;
   background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.12));
   border:1px solid rgba(255,255,255,.12);
   margin-bottom:7px;font-size:11px
 }
 .lab{color:#f0e6d3}.val{color:#ffe08d;font-weight:700}
+#clickzone{
+  position:relative;height:calc(100% - 100px);
+  display:flex;align-items:center;justify-content:center;padding:12px
+}
 #fanterwrap{
   position:relative;width:330px;height:330px;
   display:flex;align-items:center;justify-content:center;cursor:pointer
@@ -200,11 +190,6 @@ body{user-select:none}
 }
 .buybtn.active{background:linear-gradient(180deg,#8a5b33,#4c2d16);box-shadow:0 0 0 1px rgba(255,213,106,.2) inset}
 .buybtn:hover{filter:brightness(1.08)}
-.row{
-  display:flex;justify-content:space-between;padding:8px 10px;
-  background:linear-gradient(180deg, rgba(255,255,255,.1), rgba(0,0,0,.12));
-  border:1px solid rgba(255,255,255,.14);font-size:11px
-}
 button.main{
   border:none;border-radius:0;padding:11px 12px;font-weight:700;cursor:pointer;color:#fff;
   background:linear-gradient(180deg,#6b492c,#311d11);border:1px solid rgba(255,255,255,.15)
@@ -278,7 +263,7 @@ canvas{position:fixed;inset:0;pointer-events:none}
 @keyframes goldpop{from{transform:scale(.5)}to{transform:scale(.7)}}
 @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,214,106,.45), 0 0 50px rgba(255,214,106,.2)}50%{box-shadow:0 0 30px rgba(255,214,106,.65), 0 0 70px rgba(255,214,106,.3)}}
 *::-webkit-scrollbar{width:6px}
-*::-webkit-scrollbar-track{background:#0f1810}
+*::-webkit-scrollbar-track{background:#0f1820}
 *::-webkit-scrollbar-thumb{background:#8b5a2b;border-radius:999px}
 </style>
 </head>
@@ -359,7 +344,7 @@ canvas{position:fixed;inset:0;pointer-events:none}
   <div id="right" class="panel wood">
     <div class="sidehead">
       <h2>Store</h2>
-      <div class="sub">Sub upgrades, main upgrades, then buildings</div>
+      <div class="sub">Cookie-style buildings</div>
     </div>
 
     <div class="tabs">
@@ -402,26 +387,26 @@ canvas{position:fixed;inset:0;pointer-events:none}
 </div>
 
 <script>
-const STORE='FANTER_CLICKER_SAVE_V6';
+const STORE='FANTER_CLICKER_SAVE_V7';
 const el=id=>document.getElementById(id);
 const fanter=el('fanter'), mood=el('mood'), submodal=el('submodal'), golden=el('golden'), tooltip=el('tooltip');
 
 const buildings=[
-{n:'Eye Dropper',d:'Slowly drip pints.',c:15,p:0.1},
-{n:'Paw Press',d:'Press pints from paws.',c:100,p:0.5},
-{n:'Fang Tap',d:'Puncture a barrel of blood.',c:500,p:2},
-{n:'Blood Jug',d:'Collect spilled pints.',c:2000,p:8},
-{n:'Clot Farm',d:'Harvest coagulated pints.',c:8000,p:25},
-{n:'Fanter Mill',d:'Grind fur for blood.',c:30000,p:80},
-{n:'Blood Oven',d:'Bake concentrated pints.',c:100000,p:250},
-{n:'Cat Lab Alpha',d:'Scientific pint synthesis.',c:400000,p:700},
-{n:'Pint Vault',d:'Pressurized extraction.',c:1500000,p:2000},
-{n:'Fanter Portal',d:'Pints from another dimension.',c:6000000,p:6000},
-{n:'Blood Star',d:'Stellar pint fusion.',c:25000000,p:18000},
-{n:'Fanter Core',d:'Planetary blood extraction.',c:100000000,p:55000},
-{n:'Quantum Pinter',d:'Quantum tunneling.',c:400000000,p:160000},
-{n:'Blood God Shrine',d:'Offerings to the gods.',c:2000000000,p:500000},
-{n:'Fanter Universe',d:'Entire universes of pints.',c:10000000000,p:1600000}
+{n:'Eye Dropper',d:'Slowly drip pints.',c:15,p:0.1,icon:'🫙'},
+{n:'Paw Press',d:'Press pints from paws.',c:100,p:0.5,icon:'🐾'},
+{n:'Fang Tap',d:'Puncture a barrel of blood.',c:500,p:2,icon:'🧪'},
+{n:'Blood Jug',d:'Collect spilled pints.',c:2000,p:8,icon:'🪣'},
+{n:'Clot Farm',d:'Harvest coagulated pints.',c:8000,p:25,icon:'🌱'},
+{n:'Fanter Mill',d:'Grind fur for blood.',c:30000,p:80,icon:'⚙️'},
+{n:'Blood Oven',d:'Bake concentrated pints.',c:100000,p:250,icon:'🍞'},
+{n:'Cat Lab Alpha',d:'Scientific pint synthesis.',c:400000,p:700,icon:'🔬'},
+{n:'Pint Vault',d:'Pressurized extraction.',c:1500000,p:2000,icon:'🏦'},
+{n:'Fanter Portal',d:'Pints from another dimension.',c:6000000,p:6000,icon:'🌀'},
+{n:'Blood Star',d:'Stellar pint fusion.',c:25000000,p:18000,icon:'⭐'},
+{n:'Fanter Core',d:'Planetary blood extraction.',c:100000000,p:55000,icon:'🌍'},
+{n:'Quantum Pinter',d:'Quantum tunneling.',c:400000000,p:160000,icon:'🧬'},
+{n:'Blood God Shrine',d:'Offerings to the gods.',c:2000000000,p:500000,icon:'⛩️'},
+{n:'Fanter Universe',d:'Entire universes of pints.',c:10000000000,p:1600000,icon:'🌌'}
 ];
 
 const subUpgrades=[
@@ -489,7 +474,6 @@ let S={
   owned:[],subOwned:[],l:Date.now(),buildCounts:Array(buildings.length).fill(0),
   goldenBuff:0,goldenUntil:0,season:0,offlineEarned:0
 };
-
 let buyMode=1;
 let P=[];
 
@@ -519,7 +503,6 @@ function buyBuilding(i,amt){
   if(bought) toast(`Bought ${bought} ${buildings[i].n}`);
   updateAll();
 }
-
 function applySubEffect(i){
   const mod=i%6;
   if(mod===0) S.ppc*=1.02;
@@ -529,7 +512,6 @@ function applySubEffect(i){
   else if(mod===4) S.pps*=1.03;
   else S.pm*=1.01;
 }
-
 function buySub(i){
   const u=subUpgrades[i];
   if(S.subOwned.includes(i)||S.p<u.c) return;
@@ -537,7 +519,6 @@ function buySub(i){
   toast('Unlocked '+u.n);
   updateAll();
 }
-
 function buyMain(i){
   const u=mainUpgrades[i];
   if(S.owned.includes(i)||S.p<u.c) return;
@@ -549,13 +530,11 @@ function buyMain(i){
   toast('Purchased '+u.n);
   updateAll();
 }
-
 function renderTooltip(title, body, meta){
   tooltip.innerHTML=`<div class="tname">${title}</div><div>${body}</div><div class="tmeta">${meta}</div>`;
   tooltip.classList.add('show');
 }
 function hideTooltip(){tooltip.classList.remove('show')}
-
 function setTipPos(e){
   const pad=16;
   const w=tooltip.offsetWidth||240;
@@ -566,7 +545,6 @@ function setTipPos(e){
   tooltip.style.left=x+'px';
   tooltip.style.top=y+'px';
 }
-
 function cardTip(elm,title,body,meta){
   elm.addEventListener('mouseenter',e=>{renderTooltip(title,body,meta); setTipPos(e)});
   elm.addEventListener('mousemove',setTipPos);
@@ -581,14 +559,13 @@ function renderBuildings(){
     if(!reveal) return;
     const d=document.createElement('div');
     d.className='card';
-    d.innerHTML=`<div class="name">${b.n} <span style="opacity:.7">x${S.buildCounts[i]}</span></div><div class="desc">${b.d}</div><div class="cost">${fmt(cost)} Pints • +${fmt(b.p*Math.pow(1.08,S.buildCounts[i]))}/s</div>`;
+    d.innerHTML=`<div class="name">${b.icon} ${b.n} <span style="opacity:.7">x${S.buildCounts[i]}</span></div><div class="desc">${b.d}</div><div class="cost">${fmt(cost)} Pints • +${fmt(b.p*Math.pow(1.08,S.buildCounts[i]))}/s</div>`;
     d.onclick=()=>buyBuilding(i,buyMode===1?1:buyMode===10?Math.min(10,maxBuyableBuilding(i)):Math.min(100,maxBuyableBuilding(i)));
     cardTip(d,b.n,b.d,`Cost: ${fmt(cost)} pints • Produces ${fmt(b.p*Math.pow(1.08,S.buildCounts[i]))}/s`);
     x.appendChild(d);
   });
   if(!x.children.length) x.innerHTML='<div class="card locked"><div class="name">Locked</div><div class="desc">Reach 50% of a building cost to reveal it.</div></div>';
 }
-
 function renderMainUpgrades(){
   const x=el('mainpanel'); x.innerHTML='';
   mainUpgrades.forEach((u,i)=>{
@@ -602,7 +579,6 @@ function renderMainUpgrades(){
   });
   if(!x.children.length) x.innerHTML='<div class="card locked"><div class="name">Locked</div><div class="desc">Reach 75% of a main upgrade cost to reveal it.</div></div>';
 }
-
 function renderSubPanel(){
   const x=el('subpanel'); x.innerHTML='';
   subUpgrades.forEach((u,i)=>{
@@ -616,7 +592,6 @@ function renderSubPanel(){
   });
   if(!x.children.length) x.innerHTML='<div class="card locked"><div class="name">Locked</div><div class="desc">Reach 50% of a sub-upgrade cost to reveal it.</div></div>';
 }
-
 function renderSubModal(){
   const x=el('sublist'); x.innerHTML='';
   subUpgrades.forEach((u,i)=>{
@@ -629,7 +604,6 @@ function renderSubModal(){
     x.appendChild(d);
   });
 }
-
 function renderAch(){
   const x=el('ach'); x.innerHTML='';
   achData.forEach(a=>{
@@ -640,7 +614,6 @@ function renderAch(){
     x.appendChild(d);
   });
 }
-
 function renderStats(){
   el('statsbox').innerHTML=`
     <div class="row"><div class="lab">Total Pints Earned</div><div class="val">${fmt(S.tp)}</div></div>
@@ -653,7 +626,6 @@ function renderStats(){
     <div class="row"><div class="lab">Purrfect Timing</div><div class="val">${S.combo}x</div></div>
   `;
 }
-
 function updateHUD(){
   el('count').textContent=fmt(S.p);
   el('ppc').textContent=fmt(ppc());
@@ -680,79 +652,50 @@ function updateHUD(){
   el('purrfect').classList.toggle('active', activePurr);
   el('purrfect').textContent = activePurr ? `Purrfect Timing x${S.combo}` : `Purrfect Timing`;
 }
-
-function updateAll(){
-  renderBuildings();
-  renderMainUpgrades();
-  renderSubPanel();
-  renderSubModal();
-  renderAch();
-  renderStats();
-  updateHUD();
-  save();
-}
-
+function updateAll(){renderBuildings();renderMainUpgrades();renderSubPanel();renderSubModal();renderAch();renderStats();updateHUD();save()}
 function clickFanter(e){
-  S.c++;
-  S.combo=Math.min(20,S.combo+1);
-  S.cm=1+S.combo*.05;
+  S.c++;S.combo=Math.min(20,S.combo+1);S.cm=1+S.combo*.05;
   const gain=Math.max(1,Math.floor(ppc()));
-  S.p+=gain; S.tp+=gain;
-  S.lastClick=Date.now();
-  fanter.classList.add('clicking');
-  setTimeout(()=>fanter.classList.remove('clicking'),80);
+  S.p+=gain;S.tp+=gain;S.lastClick=Date.now();
+  fanter.classList.add('clicking');setTimeout(()=>fanter.classList.remove('clicking'),80);
   mood.textContent=gain>25?'😼 Big Slap!':'😺 Fanter approves!';
-  burst(e.clientX,e.clientY);
-  updateAll();
+  burst(e.clientX,e.clientY);updateAll();
 }
-
 function ascension(){
   if(S.tp<1e9) return;
   const keepSp = Math.max(0,Math.floor(S.sp*.25));
-  S.p=0; S.ppc=1; S.pps=0; S.combo=0; S.cm=1; S.asc++;
-  S.pm=1+S.asc*.1; S.owned=[]; S.subOwned=[]; S.sp=keepSp; S.sl=0;
+  S.p=0;S.ppc=1;S.pps=0;S.combo=0;S.cm=1;S.asc++;
+  S.pm=1+S.asc*.1;S.owned=[];S.subOwned=[];S.sp=keepSp;S.sl=0;
   S.buildCounts=Array(buildings.length).fill(0);
-  S.goldenBuff=0; S.goldenUntil=0; S.season=(S.season+1)%seasons.length;
-  toast('Ascended!');
-  updateAll();
+  S.goldenBuff=0;S.goldenUntil=0;S.season=(S.season+1)%seasons.length;
+  toast('Ascended!');updateAll();
 }
-
 function loadElapsed(){
   const now=Date.now();
   const diff=Math.max(0,Math.floor((now-S.l)/1000));
   if(diff>0){
     const cap = Math.min(diff, 86400);
     const earned = pps()*cap;
-    S.p+=earned;
-    S.tp+=earned;
-    S.offlineEarned=earned;
+    S.p+=earned;S.tp+=earned;S.offlineEarned=earned;
     if(Math.random()<0.5) S.sl += Math.floor(cap/300);
     S.l=now;
   }
 }
-
 const pc=el('particles'), ctx=pc.getContext('2d'), gc=el('grid'), gctx=gc.getContext('2d');
-function resize(){pc.width=innerWidth; pc.height=innerHeight; gc.width=innerWidth; gc.height=innerHeight}
+function resize(){pc.width=innerWidth;pc.height=innerHeight;gc.width=innerWidth;gc.height=innerHeight}
 function drawGrid(){
   gctx.clearRect(0,0,gc.width,gc.height);
   gctx.strokeStyle='rgba(255,255,255,.04)';
   for(let x=0;x<gc.width;x+=40){gctx.beginPath();gctx.moveTo(x,0);gctx.lineTo(x,gc.height);gctx.stroke()}
   for(let y=0;y<gc.height;y+=40){gctx.beginPath();gctx.moveTo(0,y);gctx.lineTo(gc.width,y);gctx.stroke()}
 }
-function burst(x,y){
-  for(let i=0;i<12;i++) P.push({x,y,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7,r:2+Math.random()*3,a:1});
-}
+function burst(x,y){for(let i=0;i<12;i++)P.push({x,y,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7,r:2+Math.random()*3,a:1})}
 function anim(){
   ctx.clearRect(0,0,pc.width,pc.height);
   P=P.filter(p=>p.a>.03);
-  P.forEach(p=>{
-    p.x+=p.vx; p.y+=p.vy; p.vy+=.08; p.a*=.95;
-    ctx.fillStyle=`rgba(255,220,150,${p.a})`;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-  });
+  P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.a*=.95;ctx.fillStyle=`rgba(255,220,150,${p.a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});
   requestAnimationFrame(anim);
 }
-
 function showGolden(){
   const wrap=el('fanterwrap');
   const r=wrap.getBoundingClientRect();
@@ -762,15 +705,14 @@ function showGolden(){
   setTimeout(()=>{golden.classList.remove('show')}, 9000);
 }
 function triggerGoldenReward(){
-  if(Math.random()<0.5){S.goldenBuff=1; S.goldenUntil=Date.now()+15000; toast('Golden Fanter: Frenzy!')}
-  else {S.goldenBuff=2; S.goldenUntil=Date.now()+15000; toast('Golden Fanter: Building Rush!')}
+  if(Math.random()<0.5){S.goldenBuff=1;S.goldenUntil=Date.now()+15000;toast('Golden Fanter: Frenzy!')}
+  else {S.goldenBuff=2;S.goldenUntil=Date.now()+15000;toast('Golden Fanter: Building Rush!')}
   updateAll();
 }
-
 function tick(){
   const gain=pps();
-  S.p+=gain; S.tp+=gain;
-  if(S.combo>0 && Date.now()-S.lastClick>2500){S.combo=0; S.cm=1; mood.textContent='😐 Fanter watches...'}
+  S.p+=gain;S.tp+=gain;
+  if(S.combo>0 && Date.now()-S.lastClick>2500){S.combo=0;S.cm=1;mood.textContent='😐 Fanter watches...'}
   if(Math.random()<0.12) S.sl=Math.min(9999,S.sl+1);
   if(S.sl>=25) S.sp=Math.max(S.sp,1);
   if(Date.now()>S.goldenUntil) S.goldenBuff=0;
@@ -778,23 +720,16 @@ function tick(){
   if(Math.random()<0.01) S.season=(S.season+1)%seasons.length;
   updateAll();
 }
-
-load();
-loadElapsed();
-resize();
-drawGrid();
-anim();
-updateAll();
-setInterval(tick,1000);
-setInterval(save,5000);
-window.addEventListener('resize',()=>{resize(); drawGrid()});
+load();loadElapsed();resize();drawGrid();anim();updateAll();
+setInterval(tick,1000);setInterval(save,5000);
+window.addEventListener('resize',()=>{resize();drawGrid()});
 
 fanter.addEventListener('click',clickFanter);
 el('ascend').onclick=ascension;
-el('subopen').onclick=()=>{submodal.classList.add('open'); renderSubModal()};
+el('subopen').onclick=()=>{submodal.classList.add('open');renderSubModal()};
 el('subclose').onclick=()=>submodal.classList.remove('open');
 submodal.addEventListener('click',e=>{if(e.target.id==='submodal') submodal.classList.remove('open')});
-golden.addEventListener('click',()=>{triggerGoldenReward(); golden.classList.remove('show')});
+golden.addEventListener('click',()=>{triggerGoldenReward();golden.classList.remove('show')});
 
 document.querySelectorAll('.tabbtn').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active'));
@@ -807,7 +742,7 @@ document.querySelectorAll('.buybtn').forEach(b=>b.onclick=()=>{
   b.classList.add('active');
   buyMode=parseInt(b.dataset.buy,10);
 });
-el('ticker').textContent='Fanter Clicker is loaded: sub upgrades, main upgrades, buildings, tooltips, Purrfect Timing, Golden Fanters, seasons, prestige, offline progress, and a warmer cookie-and-wood UI are active.';
+el('ticker').textContent='Fanter Clicker is loaded: Cookie-style buildings, tooltips, Purrfect Timing, Golden Fanters, seasons, prestige, offline progress, and a blue/orange textured UI are active.';
 </script>
 </body>
 </html>
