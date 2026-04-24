@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Fanter Clicker — Purrfect Bakery</title>
 <style>
   * {
@@ -21,7 +21,6 @@
     width: 100vw;
   }
 
-  /* COOKIE CLICKER INSPIRED LAYOUT - full vh/vw */
   #game {
     display: flex;
     height: 100vh;
@@ -29,7 +28,6 @@
     background: radial-gradient(circle at 20% 30%, #2e241f 0%, #1c1612 100%);
   }
 
-  /* panels with vintage paper texture */
   .panel {
     background: #faf2e6;
     background-image: radial-gradient(circle at 25% 40%, rgba(210, 180, 140, 0.15) 2%, transparent 2.5%),
@@ -45,56 +43,20 @@
   .panel::-webkit-scrollbar-track { background: #d9c5a7; border-radius: 10px; }
   .panel::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 10px; border: 2px solid #efdecb; }
 
-  #left {
-    width: 32vw;
-    min-width: 320px;
-    border-right: 4px solid #b97f44;
-    display: flex;
-    flex-direction: column;
-  }
+  #left { width: 32vw; min-width: 320px; border-right: 4px solid #b97f44; display: flex; flex-direction: column; }
+  #center { width: 40vw; min-width: 360px; border-left: 3px solid #e6cca0; border-right: 3px solid #e6cca0; background: linear-gradient(145deg, #fff4e6 0%, #f7e8d4 100%); display: flex; flex-direction: column; }
+  #right { width: 28vw; min-width: 280px; border-left: 4px solid #b97f44; display: flex; flex-direction: column; }
 
-  #center {
-    width: 40vw;
-    min-width: 360px;
-    border-left: 3px solid #e6cca0;
-    border-right: 3px solid #e6cca0;
-    background: linear-gradient(145deg, #fff4e6 0%, #f7e8d4 100%);
-    display: flex;
-    flex-direction: column;
-  }
-
-  #right {
-    width: 28vw;
-    min-width: 280px;
-    border-left: 4px solid #b97f44;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* header titles */
   .header, .sidehead {
-    background: #d8b86c;
     background: linear-gradient(135deg, #f5e1ae, #c89646);
     padding: 1rem 1rem;
     border-bottom: 3px solid #a5692c;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     color: #2c1b12;
   }
+  .header h1, .sidehead h2 { font-size: 1.4rem; font-weight: 800; text-shadow: 0 1px 0 #ffefc0; }
+  .sub { font-size: 0.75rem; font-weight: bold; color: #2d2418; }
 
-  .header h1, .sidehead h2 {
-    font-size: 1.4rem;
-    font-weight: 800;
-    text-shadow: 0 1px 0 #ffefc0;
-    letter-spacing: 1px;
-  }
-
-  .sub {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #2d2418;
-  }
-
-  /* central HUD */
   #hud {
     background: #efe2cd;
     border-radius: 32px;
@@ -104,125 +66,23 @@
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.05), 0 8px 20px rgba(0,0,0,0.15);
     border: 1px solid #ffe3b5;
   }
+  #title { font-size: 1.9rem; font-weight: 800; color: #5a2e1a; }
+  #count { font-size: 3.8rem; font-weight: 800; color: #ffb347; text-shadow: 3px 3px 0 #5a2e1a; margin: 8px 0; }
+  #stats { display: flex; justify-content: center; gap: 1.5rem; background: #dac292; padding: 8px 12px; border-radius: 60px; width: fit-content; margin: 12px auto 0; color: #2c1e12; font-weight: bold; }
+  #rank { background: #ac7540; display: inline-block; padding: 4px 16px; border-radius: 40px; font-size: 0.75rem; font-weight: bold; color: #ffefcf; margin-top: 8px; }
 
-  #title {
-    font-size: 1.9rem;
-    font-weight: 800;
-    color: #5a2e1a;
-    letter-spacing: 2px;
-  }
+  #clickzone { flex: 1; display: flex; align-items: center; justify-content: center; margin: 12px 0; }
+  #fanterwrap { position: relative; width: 300px; height: 300px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  #fanter { width: 280px; height: 280px; object-fit: cover; border-radius: 50%; box-shadow: 0 15px 25px rgba(0,0,0,0.3), 0 0 0 6px #ffd58c, 0 0 0 12px #b4622a; transition: transform 0.08s; cursor: pointer; background: #ffd966; }
+  #fanter:active { transform: scale(0.92) !important; }
+  #glow { position: absolute; inset: -20px; border-radius: 50%; background: radial-gradient(circle, rgba(255,180,70,0.3) 0%, rgba(255,200,100,0) 70%); pointer-events: none; }
 
-  #count {
-    font-size: 3.8rem;
-    font-weight: 800;
-    color: #ffb347;
-    text-shadow: 3px 3px 0 #5a2e1a;
-    line-height: 1;
-    margin: 8px 0;
-  }
+  #combo { margin-top: 16px; text-align: center; width: 240px; margin: 0 auto; }
+  #barbg { background: #5a3a24; border-radius: 20px; height: 12px; overflow: hidden; border: 1px solid #efcd8a; }
+  #bar { background: linear-gradient(90deg, #ffb347, #ffdd77); width: 0%; height: 100%; transition: width 0.08s linear; }
+  #bartext { font-size: 0.75rem; font-weight: bold; color: #c9842c; margin-top: 4px; }
 
-  #stats {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    font-size: 0.9rem;
-    background: #dac292;
-    padding: 8px 12px;
-    border-radius: 60px;
-    width: fit-content;
-    margin: 12px auto 0;
-    color: #2c1e12;
-    font-weight: bold;
-  }
-
-  #rank {
-    background: #ac7540;
-    display: inline-block;
-    padding: 4px 16px;
-    border-radius: 40px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #ffefcf;
-    margin-top: 8px;
-  }
-
-  /* CLICK ZONE - LARGER IMAGE VERSION (scaled up from 30px to 280px) */
-  #clickzone {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 12px 0;
-  }
-
-  #fanterwrap {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    cursor: pointer;
-    transition: transform 0.05s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Image styling - scales the 30x30px image up smoothly */
-  #fanter {
-    width: 280px;
-    height: 280px;
-    object-fit: contain;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-    image-rendering: smooth;
-    filter: drop-shadow(0 12px 18px rgba(0,0,0,0.35));
-    transition: transform 0.08s, filter 0.05s;
-    cursor: pointer;
-    border-radius: 50%;
-    background: #f5e2b5;
-    box-shadow: 0 15px 25px rgba(0,0,0,0.3), 0 0 0 6px #ffd58c, 0 0 0 12px #b4622a;
-  }
-  
-  #fanter:active {
-    transform: scale(0.92) !important;
-    filter: brightness(0.96);
-  }
-  
-  #glow {
-    position: absolute;
-    inset: -20px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,180,70,0.3) 0%, rgba(255,200,100,0) 70%);
-    pointer-events: none;
-  }
-
-  #combo {
-    margin-top: 16px;
-    text-align: center;
-    width: 240px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  #barbg {
-    background: #5a3a24;
-    border-radius: 20px;
-    height: 12px;
-    overflow: hidden;
-    border: 1px solid #efcd8a;
-  }
-  #bar {
-    background: linear-gradient(90deg, #ffb347, #ffdd77);
-    width: 0%;
-    height: 100%;
-    transition: width 0.08s linear;
-  }
-  #bartext {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #c9842c;
-    margin-top: 4px;
-  }
-
-  /* store cards – cookie clicker style */
+  /* Updated card styling with image support */
   .card {
     background: #fff5e8;
     border: 2px solid #ebc28e;
@@ -232,144 +92,100 @@
     cursor: pointer;
     transition: 0.08s linear;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
   .card:hover { background: #fff0e0; transform: scale(0.99); border-color: #f5b642; }
   .owned { border-left: 8px solid #ffa41e; background: #fff2e0; }
   .locked { opacity: 0.45; filter: grayscale(0.2); cursor: default; }
+  
+  /* Building icon image - using 67.png scaled up */
+  .building-icon {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    background: #b97f44;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .building-icon img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    image-rendering: crisp-edges;
+  }
+  
+  .card-info { flex: 1; }
   .name { font-weight: 800; color: #7b3f1a; font-size: 1rem; }
   .desc { font-size: 0.7rem; color: #59462f; margin: 4px 0; }
   .cost { font-weight: bold; color: #c56c1e; font-size: 0.8rem; }
-
-  /* tabs */
-  .tabs {
-    display: flex;
-    background: #cfa668;
-    gap: 2px;
-    padding: 4px 4px 0;
-  }
-  .tabbtn {
-    flex: 1;
-    background: #9c6e3e;
-    border: none;
-    padding: 10px 0;
-    font-weight: bold;
-    color: #f7efcf;
+  
+  /* Sub-upgrade cards (grid items) */
+  .sub-card {
+    background: #fff5e8;
+    border: 2px solid #ebc28e;
+    border-radius: 18px;
+    padding: 10px;
     cursor: pointer;
-    border-radius: 12px 12px 0 0;
-    font-size: 0.85rem;
+    text-align: center;
+    transition: 0.08s linear;
+    width: 90px;
   }
-  .tabbtn.active {
-    background: #f7e2b0;
-    color: #6d3d17;
-    border-bottom: 3px solid #ffb347;
+  .sub-card:hover { background: #fff0e0; transform: scale(0.98); border-color: #f5b642; }
+  .sub-card.owned { border-left: 8px solid #ffa41e; background: #fff2e0; }
+  .sub-card.locked { opacity: 0.45; filter: grayscale(0.2); cursor: default; }
+  .sub-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 8px;
+    background: #b97f44;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
+  .sub-icon img { width: 44px; height: 44px; object-fit: contain; }
+  .sub-name { font-size: 11px; font-weight: bold; color: #7b3f1a; }
+  .sub-cost { font-size: 10px; color: #c56c1e; font-weight: bold; }
+
+  .tabs { display: flex; background: #cfa668; gap: 2px; padding: 4px 4px 0; }
+  .tabbtn { flex: 1; background: #9c6e3e; border: none; padding: 10px 0; font-weight: bold; color: #f7efcf; cursor: pointer; border-radius: 12px 12px 0 0; }
+  .tabbtn.active { background: #f7e2b0; color: #6d3d17; border-bottom: 3px solid #ffb347; }
   .tab { display: none; padding: 12px; flex: 1; overflow-y: auto; }
   .tab.active { display: block; }
 
-  /* buttons */
   .buyrow { display: flex; gap: 10px; margin-bottom: 15px; }
-  .buybtn {
-    flex: 1;
-    background: #b5783a;
-    border: 0;
-    padding: 8px;
-    font-weight: bold;
-    border-radius: 40px;
-    color: white;
-    cursor: pointer;
-    transition: 0.05s linear;
-  }
+  .buybtn { flex: 1; background: #b5783a; border: 0; padding: 8px; font-weight: bold; border-radius: 40px; color: white; cursor: pointer; }
   .buybtn.active { background: #e8932c; box-shadow: 0 2px 8px orange; }
-  .main {
-    background: #b57234;
-    border: none;
-    padding: 10px;
-    border-radius: 30px;
-    font-weight: bold;
-    color: white;
-    margin-top: 8px;
-    cursor: pointer;
-    width: 100%;
-  }
+  .main { background: #b57234; border: none; padding: 10px; border-radius: 30px; font-weight: bold; color: white; margin-top: 8px; cursor: pointer; width: 100%; }
   .main:active { transform: scale(0.97); }
 
-  /* modal */
-  .modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-  }
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center; }
   .modal.open { display: flex; }
-  .modal-content {
-    background: #fdebd0;
-    border-radius: 32px;
-    width: 85vw;
-    max-width: 1000px;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    border: 8px solid #d9a458;
-    overflow: hidden;
-  }
-  .modal-header {
-    background: #c38642;
-    padding: 14px;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-  }
+  .modal-content { background: #fdebd0; border-radius: 32px; width: 85vw; max-width: 1000px; height: 80vh; display: flex; flex-direction: column; border: 8px solid #d9a458; overflow: hidden; }
+  .modal-header { background: #c38642; padding: 14px; color: white; display: flex; justify-content: space-between; font-weight: bold; }
   .modal-body { overflow-y: auto; padding: 16px; background: #fef3e6; flex: 1; }
   #sublist { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
   #treeGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .treeNode { background: #f3e0cc; border-radius: 16px; padding: 12px; border: 1px solid #e2b56a; cursor: pointer; }
 
-  /* golden cookie effect */
-  #golden {
-    position: fixed;
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle, #ffdd99, #ffb347);
-    border-radius: 50%;
-    box-shadow: 0 0 20px gold;
-    cursor: pointer;
-    opacity: 0;
-    transition: 0.08s;
-    z-index: 200;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    font-weight: bold;
-    color: #b55a1a;
-  }
+  #golden { position: fixed; width: 70px; height: 70px; background: radial-gradient(circle, #ffdd99, #ffb347); border-radius: 50%; box-shadow: 0 0 20px gold; cursor: pointer; opacity: 0; transition: 0.08s; z-index: 200; pointer-events: none; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; color: #b55a1a; }
   #golden.show { opacity: 1; pointer-events: auto; animation: floatGold 0.2s ease; }
   @keyframes floatGold { from { transform: scale(0.2); } to { transform: scale(1); } }
   
-  .toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #3a2618;
-    color: #ffeaaf;
-    padding: 8px 18px;
-    border-radius: 60px;
-    font-weight: bold;
-    z-index: 300;
-    animation: fadeUp 2s forwards;
-    font-size: 0.85rem;
-  }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #3a2618; color: #ffeaaf; padding: 8px 18px; border-radius: 60px; font-weight: bold; z-index: 300; animation: fadeUp 2s forwards; }
   @keyframes fadeUp { 0% { opacity: 0; bottom: 0; } 10% { opacity: 1; bottom: 30px; } 90% { opacity: 1; } 100% { opacity: 0; display: none; } }
   
   canvas#particles { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 150; }
   .row { display: flex; justify-content: space-between; background: #e9cfab; padding: 6px 12px; border-radius: 20px; margin: 8px 0; font-weight: bold; }
+  .section-title { font-size: 12px; font-weight: bold; color: #7b3f1a; margin: 10px 0 5px; }
+  #subpanel { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -384,31 +200,11 @@
       <div class="row"><span>🖱️ Per Click</span><span id="infoPPC">1</span></div>
       <div class="row"><span>🏆 Rank</span><span id="infoRank">Fanter Peasant</span></div>
     </div>
-    <div id="clickzone">
-      <div id="fanterwrap">
-        <div id="glow"></div>
-        <!-- using local 67.png from root, scaled to 280x280 via CSS -->
-        <img id="fanter" src="67.png" alt="Fanter Cat" onerror="this.src='https://placekitten.com/280/280'">
-      </div>
-      <div id="combo">
-        <div id="barbg"><div id="bar"></div></div>
-        <div id="bartext"></div>
-      </div>
-    </div>
-    <div id="pool" style="margin:10px; background:#8b694a; border-radius:16px; padding:5px; text-align:center;">
-      <span id="pooltier">🌾 Seedling</span>
-      <div style="background:#5d3f28; border-radius:20px;"><div id="poolliq" style="height:8px; width:0%; background:#f5b042; border-radius:20px;"></div></div>
-      <span>🍊 Fanter Farming</span>
-    </div>
+    <div id="clickzone"><div id="fanterwrap"><div id="glow"></div><img id="fanter" src="https://ih1.redbubble.net/image.2197409393.5460/pp,840x830-pad,1000x1000,f8f8f8.u1.jpg" alt="Fanter Cat"></div><div id="combo"><div id="barbg"><div id="bar"></div></div><div id="bartext"></div></div></div>
+    <div id="pool" style="margin:10px; background:#8b694a; border-radius:16px; padding:5px; text-align:center;"><span id="pooltier">🌾 Seedling</span><div style="background:#5d3f28; border-radius:20px;"><div id="poolliq" style="height:8px; width:0%; background:#f5b042; border-radius:20px;"></div></div><span>🍊 Fanter Farming</span></div>
   </div>
   <div id="center" class="panel">
-    <div id="hud">
-      <div id="title">🍪 FANTER CLICKER</div>
-      <div id="count">0</div>
-      <div>🍊 Orange Pints</div>
-      <div id="stats"><span>⚡ PPS: <span id="pps">0</span></span><span>🖱️ Click: <span id="ppc">1</span></span><span>🖱️ Clicks: <span id="clicks">0</span></span></div>
-      <div id="rank">Fanter Peasant</div>
-    </div>
+    <div id="hud"><div id="title">🍪 FANTER CLICKER</div><div id="count">0</div><div>🍊 Orange Pints</div><div id="stats"><span>⚡ PPS: <span id="pps">0</span></span><span>🖱️ Click: <span id="ppc">1</span></span><span>🖱️ Clicks: <span id="clicks">0</span></span></div><div id="rank">Fanter Peasant</div></div>
     <div id="ticker" style="background:#e6cfaa; margin:0 12px; border-radius:30px; padding:6px; text-align:center; font-size:0.8rem;">✨ Freshly baked orange biscuits ✨</div>
     <div style="padding:12px;">
       <div class="row"><span>✨ Active Buff</span><span id="buffText">None</span></div>
@@ -420,7 +216,7 @@
   <div id="right" class="panel">
     <div class="sidehead"><h2>🏪 Store</h2><div class="sub">Cats & industry</div></div>
     <div class="tabs"><button class="tabbtn active" data-tab="store">🛒 Buildings</button><button class="tabbtn" data-tab="ach">🏆 Achievements</button><button class="tabbtn" data-tab="stats">📊 Stats</button><button class="tabbtn" data-tab="prestige">⭐ Ascend</button></div>
-    <div id="tab-store" class="tab active"><div class="buyrow"><button class="buybtn active" data-buy="1">1</button><button class="buybtn" data-buy="10">10</button><button class="buybtn" data-buy="100">100</button></div><div class="section-title">🏠 Buildings</div><div id="buildlist" style="max-height: 50vh; overflow-y: auto;"></div><hr><div class="section-title">✨ Sub-Upgrades (icons)</div><div id="subpanel" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;"></div></div>
+    <div id="tab-store" class="tab active"><div class="buyrow"><button class="buybtn active" data-buy="1">1</button><button class="buybtn" data-buy="10">10</button><button class="buybtn" data-buy="100">100</button></div><div class="section-title">🏠 Buildings</div><div id="buildlist" style="max-height: 50vh; overflow-y: auto;"></div><hr><div class="section-title">✨ Sub-Upgrades</div><div id="subpanel"></div></div>
     <div id="tab-ach" class="tab"><div id="ach" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;"></div></div>
     <div id="tab-stats" class="tab"><div id="statsbox"></div></div>
     <div id="tab-prestige" class="tab"><div id="prestigeDiv"><div class="row"><span>🌟 Heavenly Chips</span><span id="hcDisplay">0</span></div><div class="row"><span>⬆️ Ascensions</span><span id="ascText">0</span></div><button id="ascend" class="main">✨ ASCEND (≥1B pints) ✨</button><button id="subopen" class="main">⚗️ Sub-Upgrades Vault</button></div></div>
@@ -436,11 +232,37 @@
   (function(){
     // ---------- DATA ----------
     const buildings = [
-      {n:'Eye Dropper', d:'Slow drip', c:12, p:0.12, icon:'💧'},{n:'Paw Press', d:'knead pints', c:70, p:0.6, icon:'🐾'},{n:'Fang Tap', d:'puncture', c:320, p:2.4, icon:'🦷'},{n:'Blood Jug', d:'collect', c:1300, p:9, icon:'🏺'},{n:'Clot Farm', d:'harvest', c:5500, p:28, icon:'🌾'},{n:'Fanter Mill', d:'grind', c:22000, p:90, icon:'⚙️'},{n:'Blood Oven', d:'bake', c:80000, p:280, icon:'🔥'},{n:'Cat Lab', d:'science', c:300000, p:780, icon:'🧪'},{n:'Pint Vault', d:'pressurized', c:1100000, p:2200, icon:'🏦'},{n:'Fanter Portal', d:'dimension', c:4200000, p:6800, icon:'🌀'},{n:'Blood Star', d:'stellar', c:16000000, p:20000, icon:'⭐'},{n:'Fanter Core', d:'planetary', c:65000000, p:60000, icon:'🌍'},{n:'Quantum Pinter', d:'quantum', c:250000000, p:175000, icon:'⚛️'},{n:'Blood God', d:'divine', c:1200000000, p:540000, icon:'🙏'},{n:'Fanter Universe', d:'multiverse', c:5000000000, p:1700000, icon:'🌌'}
+      {n:'Eye Dropper', d:'Slow drip', c:12, p:0.12},
+      {n:'Paw Press', d:'knead pints', c:70, p:0.6},
+      {n:'Fang Tap', d:'puncture', c:320, p:2.4},
+      {n:'Blood Jug', d:'collect', c:1300, p:9},
+      {n:'Clot Farm', d:'harvest', c:5500, p:28},
+      {n:'Fanter Mill', d:'grind', c:22000, p:90},
+      {n:'Blood Oven', d:'bake', c:80000, p:280},
+      {n:'Cat Lab', d:'science', c:300000, p:780},
+      {n:'Pint Vault', d:'pressurized', c:1100000, p:2200},
+      {n:'Fanter Portal', d:'dimension', c:4200000, p:6800},
+      {n:'Blood Star', d:'stellar', c:16000000, p:20000},
+      {n:'Fanter Core', d:'planetary', c:65000000, p:60000},
+      {n:'Quantum Pinter', d:'quantum', c:250000000, p:175000},
+      {n:'Blood God', d:'divine', c:1200000000, p:540000},
+      {n:'Fanter Universe', d:'multiverse', c:5000000000, p:1700000}
     ];
     const subUpgrades = [
-      {n:'Catnip Charm', d:'+2% click', c:18, effect:'clickMult', val:1.02, icon:'🌿'},{n:'Milk Sigil', d:'+2% PPS', c:45, effect:'ppsMult', val:1.02, icon:'🥛'},{n:'Whisker Relay', d:'+2% combo', c:110, effect:'comboBonus', val:1.02, icon:'🐱'},{n:'Paw Catalyst', d:'+3% click', c:240, effect:'clickMult', val:1.03, icon:'🐾'},{n:'Fur Furnace', d:'+2% PPS', c:520, effect:'ppsMult', val:1.02, icon:'🔥'},{n:'Tuna Circuit', d:'+1% all', c:1100, effect:'globalMult', val:1.01, icon:'🐟'},{n:'Moonwhisker', d:'+3% PPS', c:2600, effect:'ppsMult', val:1.03, icon:'🌙'},{n:'Chonk Buffer', d:'+3% click', c:6200, effect:'clickMult', val:1.03, icon:'🍩'},{n:'Claw Reactor', d:'+5% PPS', c:14000, effect:'ppsMult', val:1.05, icon:'⚡'},{n:'Purr Coil', d:'+1 combo max', c:32000, effect:'extraCombo', val:1, icon:'🔩'},{n:'Orange Halo', d:'+5% all', c:70000, effect:'globalMult', val:1.05, icon:'🍊'},{n:'Fanter Lens', d:'+5% click', c:150000, effect:'clickMult', val:1.05, icon:'🔍'}
+      {n:'Catnip Charm', d:'+2% click', c:18, effect:'clickMult', val:1.02},
+      {n:'Milk Sigil', d:'+2% PPS', c:45, effect:'ppsMult', val:1.02},
+      {n:'Whisker Relay', d:'+2% combo', c:110, effect:'comboBonus', val:1.02},
+      {n:'Paw Catalyst', d:'+3% click', c:240, effect:'clickMult', val:1.03},
+      {n:'Fur Furnace', d:'+2% PPS', c:520, effect:'ppsMult', val:1.02},
+      {n:'Tuna Circuit', d:'+1% all', c:1100, effect:'globalMult', val:1.01},
+      {n:'Moonwhisker', d:'+3% PPS', c:2600, effect:'ppsMult', val:1.03},
+      {n:'Chonk Buffer', d:'+3% click', c:6200, effect:'clickMult', val:1.03},
+      {n:'Claw Reactor', d:'+5% PPS', c:14000, effect:'ppsMult', val:1.05},
+      {n:'Purr Coil', d:'+1 combo max', c:32000, effect:'extraCombo', val:1},
+      {n:'Orange Halo', d:'+5% all', c:70000, effect:'globalMult', val:1.05},
+      {n:'Fanter Lens', d:'+5% click', c:150000, effect:'clickMult', val:1.05}
     ];
+    
     let S = {
       p: 0, tp: 0, clicks: 0, ppcBase: 1, ppsBase: 0, asc: 0, ascBonus: 1, 
       combo: 0, comboMult: 1, maxCombo: 20, lastClick: 0,
@@ -450,11 +272,13 @@
       globalMult: 1, clickMult: 1, ppsMult: 1, lastSaved: Date.now()
     };
     let buyMode = 1;
+    
     const fmt = (n) => { if(n>=1e12) return (n/1e12).toFixed(2)+'T'; if(n>=1e9) return (n/1e9).toFixed(2)+'B'; if(n>=1e6) return (n/1e6).toFixed(1)+'M'; if(n>=1e3) return (n/1e3).toFixed(1)+'K'; return Math.floor(n).toString(); };
     const totalBuildings = () => S.buildCounts.reduce((a,b)=>a+b,0);
     const effectivePPC = () => Math.floor(S.ppcBase * S.clickMult * S.globalMult * (S.goldenBuff===1?2:1) * (1 + S.asc*0.12));
     const effectivePPS = () => (S.ppsBase + S.sp) * S.ppsMult * S.globalMult * (S.goldenBuff===2?3:1) * (1 + S.asc*0.12);
     const costBuilding = (i) => Math.floor(buildings[i].c * Math.pow(1.15, S.buildCounts[i]));
+    
     function applySubEffect(idx){
       let u = subUpgrades[idx];
       if(u.effect === 'clickMult') S.clickMult *= u.val;
@@ -463,6 +287,7 @@
       if(u.effect === 'comboBonus') S.comboMult = Math.min(2.5, S.comboMult * u.val);
       if(u.effect === 'extraCombo') S.maxCombo += 1;
     }
+    
     function buySub(i){
       if(S.subOwned.includes(i)) return;
       let u = subUpgrades[i];
@@ -474,6 +299,7 @@
         updateAll();
       }
     }
+    
     function buyBuilding(i, amt){
       for(let k=0; k<amt; k++){
         let cost = costBuilding(i);
@@ -485,6 +311,7 @@
       }
       updateAll();
     }
+    
     function ascension(){
       if(S.tp < 1e9) { Toast("Need 1 Billion pints to ascend!"); return; }
       let chips = Math.max(1, Math.floor(Math.sqrt(S.tp / 1e9)));
@@ -504,6 +331,7 @@
       Toast(`🌟 Ascended! +${chips} Heavenly Chips`);
       updateAll();
     }
+    
     function clickEvent(e){
       let gain = effectivePPC();
       let comboGain = Math.min(S.maxCombo, S.combo+1);
@@ -519,10 +347,12 @@
       document.getElementById('fanter').style.transform = 'scale(0.92)';
       setTimeout(()=> document.getElementById('fanter').style.transform = '', 90);
     }
+    
     let particles = [];
     function burstEffect(x,y){
       for(let i=0;i<12;i++) particles.push({x,y, vx:(Math.random()-.5)*6, vy:(Math.random()-.5)*6-2, life:1});
     }
+    
     function drawParticles(ctx,w,h){
       ctx.clearRect(0,0,w,h);
       for(let i=particles.length-1;i>=0;i--){
@@ -534,8 +364,9 @@
       }
       requestAnimationFrame(()=>{ let canvas = document.getElementById('particles'); if(canvas) drawParticles(canvas.getContext('2d'), canvas.width, canvas.height); });
     }
+    
     function Toast(msg){ let d=document.createElement('div'); d.className='toast'; d.innerText=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),2000); }
-    let goldenTimeout;
+    
     function spawnGolden(){
       let wrap = document.getElementById('fanterwrap');
       let rect = wrap.getBoundingClientRect();
@@ -546,13 +377,15 @@
       g.classList.add('show');
       setTimeout(()=> g.classList.remove('show'), 10000);
     }
+    
     function triggerGolden(){
       let r = Math.random();
-      if(r<0.4){ S.goldenBuff=1; S.goldenUntil=Date.now()+14000; Toast("✨ Golden Fanter: Click Frenzy! (2x click) ✨"); }
-      else if(r<0.7){ S.goldenBuff=2; S.goldenUntil=Date.now()+14000; Toast("🌟 Golden Fanter: Building Rush! (3x PPS) 🌟"); }
+      if(r<0.4){ S.goldenBuff=1; S.goldenUntil=Date.now()+14000; Toast("✨ Golden Fanter: Click Frenzy! ✨"); }
+      else if(r<0.7){ S.goldenBuff=2; S.goldenUntil=Date.now()+14000; Toast("🌟 Golden Fanter: Building Rush! 🌟"); }
       else { let bonus = 500 + Math.floor(effectivePPS()*15); S.p += bonus; Toast(`🍊 Golden Fanter: ${fmt(bonus)} pints!`); }
       updateAll();
     }
+    
     function gameLoop(){
       let now = Date.now();
       if(now - S.lastSaved > 1000){
@@ -568,6 +401,111 @@
       }
       requestAnimationFrame(gameLoop);
     }
+    
+    // ========== RENDER FUNCTIONS WITH 67.png IMAGE ==========
+    
+    function renderBuildings(){
+      let container = document.getElementById('buildlist');
+      container.innerHTML = '';
+      buildings.forEach((b,i)=>{
+        let owned = S.buildCounts[i];
+        let cost = costBuilding(i);
+        let prod = buildings[i].p;
+        let card = document.createElement('div'); 
+        card.className = 'card';
+        if(owned>0) card.classList.add('owned');
+        
+        // Each building card gets the 67.png image
+        card.innerHTML = `
+          <div class="building-icon"><img src="67.png" alt="icon"></div>
+          <div class="card-info">
+            <div class="name">${b.n} x${owned}</div>
+            <div class="desc">${b.d}</div>
+            <div class="cost">💰 ${fmt(cost)} pints</div>
+            <div>+${fmt(prod)}/s each</div>
+          </div>
+        `;
+        card.onclick = ()=> buyBuilding(i, buyMode);
+        container.appendChild(card);
+      });
+    }
+    
+    function renderSubGrid(){
+      let container = document.getElementById('subpanel');
+      container.innerHTML = '';
+      subUpgrades.forEach((u,i)=>{
+        let owned = S.subOwned.includes(i);
+        let canAfford = S.p >= u.c;
+        let div = document.createElement('div');
+        div.className = 'sub-card';
+        if(owned) div.classList.add('owned');
+        if(!owned && !canAfford) div.classList.add('locked');
+        
+        // Each sub-upgrade card also gets the 67.png image
+        div.innerHTML = `
+          <div class="sub-icon"><img src="67.png" alt="icon"></div>
+          <div class="sub-name">${u.n}</div>
+          <div class="sub-cost">💰 ${fmt(u.c)}</div>
+          <div style="font-size:9px; color:#59462f;">${u.d}</div>
+        `;
+        if(!owned && canAfford) div.onclick = ()=> buySub(i);
+        container.appendChild(div);
+      });
+    }
+    
+    function renderSubModal(){
+      let x = document.getElementById('sublist');
+      x.innerHTML = '';
+      subUpgrades.forEach((u,i)=>{
+        let owned = S.subOwned.includes(i);
+        let canAfford = S.p >= u.c;
+        let div = document.createElement('div');
+        div.className = 'sub-card';
+        if(owned) div.classList.add('owned');
+        if(!owned && !canAfford) div.classList.add('locked');
+        div.innerHTML = `
+          <div class="sub-icon"><img src="67.png" alt="icon"></div>
+          <div class="sub-name">${u.n}</div>
+          <div class="sub-cost">💰 ${fmt(u.c)}</div>
+          <div style="font-size:9px;">${u.d}</div>
+        `;
+        if(!owned && canAfford) div.onclick = ()=> buySub(i);
+        x.appendChild(div);
+      });
+    }
+    
+    function renderAchievements(){
+      let achContainer = document.getElementById('ach');
+      let checks = [
+        {cond:S.tp>=100, name:'First Pint', icon:'🥉'},{cond:S.tp>=10000, name:'Pint Hoarder', icon:'🥈'},{cond:S.tp>=1e6, name:'Orange Empire', icon:'🥇'},
+        {cond:S.tp>=1e8, name:'Pint Overlord', icon:'💎'},{cond:S.subOwned.length>=10, name:'Upgrade Collector', icon:'🏆'},{cond:S.subOwned.length>=25, name:'Fanter Lord', icon:'👑'},
+        {cond:S.sp>=1, name:'Auto Paw', icon:'🐾'},{cond:S.sl>=10, name:'Sugar Rush', icon:'🌙'},{cond:S.combo>=7, name:'Purrfect Timing', icon:'✨'}
+      ];
+      achContainer.innerHTML = checks.map(c=>`<div class="card ${c.cond?'':'locked'}" style="text-align:center; display:block;"><div style="font-size:24px;">${c.icon}</div><div>${c.name}</div></div>`).join('');
+    }
+    
+    function renderStatsPanel(){
+      let box = document.getElementById('statsbox');
+      box.innerHTML = `<div class="row"><span>🍊 Total pints</span><span>${fmt(S.tp)}</span></div>
+      <div class="row"><span>⚡ Current PPS</span><span>${fmt(effectivePPS())}</span></div>
+      <div class="row"><span>🖱️ Click power</span><span>${fmt(effectivePPC())}</span></div>
+      <div class="row"><span>🏆 Ascensions</span><span>${S.asc}</span></div>
+      <div class="row"><span>✨ Heavenly chips</span><span>${S.hc}</span></div>
+      <div class="row"><span>📦 Sub upgrades</span><span>${S.subOwned.length}</span></div>
+      <div class="row"><span>🏚️ Buildings owned</span><span>${totalBuildings()}</span></div>`;
+    }
+    
+    function renderAscTree(){
+      let container = document.getElementById('treeGrid');
+      if(!container) return;
+      let nodes = [{name:'Legacy', cost:1, owned:true},{name:'Heavenly Cookies',cost:3,req:0},{name:'Permanent Slot',cost:10,req:0},{name:'Purrfect Memory',cost:25,req:1},{name:'Golden Fur',cost:40,req:1},{name:'Milk Blessing',cost:60,req:2}];
+      container.innerHTML = nodes.map((n,i)=>{
+        let owned = (i===0) || S.hc >= n.cost && (!n.req || S.hc>=nodes[n.req]?.cost);
+        let canBuy = (S.hc >= n.cost && (i===0 || S.hc>= (nodes[n.req]?.cost||0)));
+        return `<div class="treeNode ${!canBuy?'locked':''}" style="cursor:${canBuy?'pointer':'default'}" onclick="${canBuy?`S.hc-=${n.cost}; Toast('Bought ${n.name}'); updateAll();`:'return false;'}"><b>${n.name}</b><div>⭐ ${n.cost} chips</div><div>${n.desc||'permanent boost'}</div></div>`;
+      }).join('');
+    }
+    
     function updateAll(){
       let ppcVal = effectivePPC();
       let ppsVal = effectivePPS();
@@ -601,62 +539,7 @@
       renderAscTree();
       saveGame();
     }
-    function renderBuildings(){
-      let container = document.getElementById('buildlist');
-      container.innerHTML = '';
-      buildings.forEach((b,i)=>{
-        let owned = S.buildCounts[i];
-        let cost = costBuilding(i);
-        let prod = buildings[i].p;
-        let card = document.createElement('div'); card.className = 'card';
-        if(owned>0) card.classList.add('owned');
-        card.innerHTML = `<div class="name">${b.icon} ${b.n} x${owned}</div><div class="desc">${b.d}</div><div class="cost">💰 ${fmt(cost)} pints</div><div>+${fmt(prod)}/s each</div>`;
-        card.onclick = ()=> buyBuilding(i, buyMode);
-        container.appendChild(card);
-      });
-    }
-    function renderSubGrid(){
-      let container = document.getElementById('subpanel');
-      container.innerHTML = '';
-      subUpgrades.forEach((u,i)=>{
-        let owned = S.subOwned.includes(i);
-        let btn = document.createElement('div'); btn.className = 'card'; btn.style.textAlign='center'; btn.style.width='80px'; btn.style.padding='6px';
-        btn.innerHTML = `<div style="font-size:32px;">${u.icon}</div><div style="font-size:10px;">${u.n}</div><div style="font-size:9px;">${fmt(u.c)}</div>`;
-        if(!owned && S.p >= u.c*0.5) btn.onclick = ()=> buySub(i);
-        if(owned) btn.classList.add('owned');
-        if(!owned && S.p < u.c*0.4) btn.style.opacity='0.4';
-        container.appendChild(btn);
-      });
-    }
-    function renderAchievements(){
-      let achContainer = document.getElementById('ach');
-      let checks = [
-        {cond:S.tp>=100, name:'First Pint', icon:'🥉'},{cond:S.tp>=10000, name:'Pint Hoarder', icon:'🥈'},{cond:S.tp>=1e6, name:'Orange Empire', icon:'🥇'},
-        {cond:S.tp>=1e8, name:'Pint Overlord', icon:'💎'},{cond:S.subOwned.length>=10, name:'Upgrade Collector', icon:'🏆'},{cond:S.subOwned.length>=25, name:'Fanter Lord', icon:'👑'},
-        {cond:S.sp>=1, name:'Auto Paw', icon:'🐾'},{cond:S.sl>=10, name:'Sugar Rush', icon:'🌙'},{cond:S.combo>=7, name:'Purrfect Timing', icon:'✨'}
-      ];
-      achContainer.innerHTML = checks.map(c=>`<div class="card ${c.cond?'':'locked'}" style="text-align:center"><div style="font-size:24px;">${c.icon}</div><div>${c.name}</div></div>`).join('');
-    }
-    function renderStatsPanel(){
-      let box = document.getElementById('statsbox');
-      box.innerHTML = `<div class="row"><span>🍊 Total pints</span><span>${fmt(S.tp)}</span></div>
-      <div class="row"><span>⚡ Current PPS</span><span>${fmt(effectivePPS())}</span></div>
-      <div class="row"><span>🖱️ Click power</span><span>${fmt(effectivePPC())}</span></div>
-      <div class="row"><span>🏆 Ascensions</span><span>${S.asc}</span></div>
-      <div class="row"><span>✨ Heavenly chips</span><span>${S.hc}</span></div>
-      <div class="row"><span>📦 Sub upgrades</span><span>${S.subOwned.length}</span></div>
-      <div class="row"><span>🏚️ Buildings owned</span><span>${totalBuildings()}</span></div>`;
-    }
-    function renderAscTree(){
-      let container = document.getElementById('treeGrid');
-      if(!container) return;
-      let nodes = [{name:'Legacy', cost:1, owned:true},{name:'Heavenly Cookies',cost:3,req:0},{name:'Permanent Slot',cost:10,req:0},{name:'Purrfect Memory',cost:25,req:1},{name:'Golden Fur',cost:40,req:1},{name:'Milk Blessing',cost:60,req:2}];
-      container.innerHTML = nodes.map((n,i)=>{
-        let owned = (i===0) || S.hc >= n.cost && (!n.req || S.hc>=nodes[n.req]?.cost);
-        let canBuy = (S.hc >= n.cost && (i===0 || S.hc>= (nodes[n.req]?.cost||0)));
-        return `<div class="treeNode ${!canBuy?'locked':''}" style="cursor:${canBuy?'pointer':'default'}" onclick="${canBuy?`S.hc-=${n.cost}; Toast('Bought ${n.name}'); updateAll();`:'return false;'}"><b>${n.name}</b><div>⭐ ${n.cost} chips</div><div>${n.desc||'permanent boost'}</div></div>`;
-      }).join('');
-    }
+    
     function saveGame(){ localStorage.setItem('fanter_clicker_v2', JSON.stringify({...S, lastSaved:Date.now()})); }
     function loadGame(){
       let data = localStorage.getItem('fanter_clicker_v2');
@@ -666,14 +549,15 @@
       }
       updateAll();
     }
-    // event listeners
+    
+    // Event Listeners
     window.onload = () => {
       loadGame();
       setInterval(()=>{ S.p += effectivePPS(); S.tp += effectivePPS(); updateAll(); }, 1000);
       document.getElementById('fanter').addEventListener('click', clickEvent);
       document.getElementById('ascend').onclick = ascension;
       document.getElementById('openAsc').onclick = ()=> document.getElementById('ascmodal').classList.add('open');
-      document.getElementById('subopen').onclick = ()=> { document.getElementById('submodal').classList.add('open'); renderSubGrid(); };
+      document.getElementById('subopen').onclick = ()=> { document.getElementById('submodal').classList.add('open'); renderSubModal(); };
       document.getElementById('subclose').onclick = ()=> document.getElementById('submodal').classList.remove('open');
       document.getElementById('asclose').onclick = ()=> document.getElementById('ascmodal').classList.remove('open');
       document.getElementById('renameBtn').onclick = ()=>{ let newName = document.getElementById('bakeryName').value; if(newName) S.bakeryName = newName; updateAll(); };
