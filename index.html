@@ -82,7 +82,7 @@
   #bar { background: linear-gradient(90deg, #ffb347, #ffdd77); width: 0%; height: 100%; transition: width 0.08s linear; }
   #bartext { font-size: 0.75rem; font-weight: bold; color: #c9842c; margin-top: 4px; }
 
-  /* Updated card styling with image support */
+  /* Card styling */
   .card {
     background: #fff5e8;
     border: 2px solid #ebc28e;
@@ -100,24 +100,24 @@
   .owned { border-left: 8px solid #ffa41e; background: #fff2e0; }
   .locked { opacity: 0.45; filter: grayscale(0.2); cursor: default; }
   
-  /* Building icon image - using 67.png scaled up */
+  /* Icon styles - emoji fallback + custom image for eye dropper */
   .building-icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     flex-shrink: 0;
     background: #b97f44;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 28px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
   .building-icon img {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
-    image-rendering: crisp-edges;
   }
   
   .card-info { flex: 1; }
@@ -125,7 +125,7 @@
   .desc { font-size: 0.7rem; color: #59462f; margin: 4px 0; }
   .cost { font-weight: bold; color: #c56c1e; font-size: 0.8rem; }
   
-  /* Sub-upgrade cards (grid items) */
+  /* Sub-upgrade cards */
   .sub-card {
     background: #fff5e8;
     border: 2px solid #ebc28e;
@@ -140,17 +140,18 @@
   .sub-card.owned { border-left: 8px solid #ffa41e; background: #fff2e0; }
   .sub-card.locked { opacity: 0.45; filter: grayscale(0.2); cursor: default; }
   .sub-icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     margin: 0 auto 8px;
     background: #b97f44;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 24px;
     overflow: hidden;
   }
-  .sub-icon img { width: 44px; height: 44px; object-fit: contain; }
+  .sub-icon img { width: 40px; height: 40px; object-fit: contain; }
   .sub-name { font-size: 11px; font-weight: bold; color: #7b3f1a; }
   .sub-cost { font-size: 10px; color: #c56c1e; font-weight: bold; }
 
@@ -232,35 +233,35 @@
   (function(){
     // ---------- DATA ----------
     const buildings = [
-      {n:'Eye Dropper', d:'Slow drip', c:12, p:0.12},
-      {n:'Paw Press', d:'knead pints', c:70, p:0.6},
-      {n:'Fang Tap', d:'puncture', c:320, p:2.4},
-      {n:'Blood Jug', d:'collect', c:1300, p:9},
-      {n:'Clot Farm', d:'harvest', c:5500, p:28},
-      {n:'Fanter Mill', d:'grind', c:22000, p:90},
-      {n:'Blood Oven', d:'bake', c:80000, p:280},
-      {n:'Cat Lab', d:'science', c:300000, p:780},
-      {n:'Pint Vault', d:'pressurized', c:1100000, p:2200},
-      {n:'Fanter Portal', d:'dimension', c:4200000, p:6800},
-      {n:'Blood Star', d:'stellar', c:16000000, p:20000},
-      {n:'Fanter Core', d:'planetary', c:65000000, p:60000},
-      {n:'Quantum Pinter', d:'quantum', c:250000000, p:175000},
-      {n:'Blood God', d:'divine', c:1200000000, p:540000},
-      {n:'Fanter Universe', d:'multiverse', c:5000000000, p:1700000}
+      {n:'Eye Dropper', d:'Slow drip', c:12, p:0.12, icon:'💧', customImage: true},
+      {n:'Paw Press', d:'knead pints', c:70, p:0.6, icon:'🐾'},
+      {n:'Fang Tap', d:'puncture', c:320, p:2.4, icon:'🦷'},
+      {n:'Blood Jug', d:'collect', c:1300, p:9, icon:'🏺'},
+      {n:'Clot Farm', d:'harvest', c:5500, p:28, icon:'🌾'},
+      {n:'Fanter Mill', d:'grind', c:22000, p:90, icon:'⚙️'},
+      {n:'Blood Oven', d:'bake', c:80000, p:280, icon:'🔥'},
+      {n:'Cat Lab', d:'science', c:300000, p:780, icon:'🧪'},
+      {n:'Pint Vault', d:'pressurized', c:1100000, p:2200, icon:'🏦'},
+      {n:'Fanter Portal', d:'dimension', c:4200000, p:6800, icon:'🌀'},
+      {n:'Blood Star', d:'stellar', c:16000000, p:20000, icon:'⭐'},
+      {n:'Fanter Core', d:'planetary', c:65000000, p:60000, icon:'🌍'},
+      {n:'Quantum Pinter', d:'quantum', c:250000000, p:175000, icon:'⚛️'},
+      {n:'Blood God', d:'divine', c:1200000000, p:540000, icon:'🙏'},
+      {n:'Fanter Universe', d:'multiverse', c:5000000000, p:1700000, icon:'🌌'}
     ];
     const subUpgrades = [
-      {n:'Catnip Charm', d:'+2% click', c:18, effect:'clickMult', val:1.02},
-      {n:'Milk Sigil', d:'+2% PPS', c:45, effect:'ppsMult', val:1.02},
-      {n:'Whisker Relay', d:'+2% combo', c:110, effect:'comboBonus', val:1.02},
-      {n:'Paw Catalyst', d:'+3% click', c:240, effect:'clickMult', val:1.03},
-      {n:'Fur Furnace', d:'+2% PPS', c:520, effect:'ppsMult', val:1.02},
-      {n:'Tuna Circuit', d:'+1% all', c:1100, effect:'globalMult', val:1.01},
-      {n:'Moonwhisker', d:'+3% PPS', c:2600, effect:'ppsMult', val:1.03},
-      {n:'Chonk Buffer', d:'+3% click', c:6200, effect:'clickMult', val:1.03},
-      {n:'Claw Reactor', d:'+5% PPS', c:14000, effect:'ppsMult', val:1.05},
-      {n:'Purr Coil', d:'+1 combo max', c:32000, effect:'extraCombo', val:1},
-      {n:'Orange Halo', d:'+5% all', c:70000, effect:'globalMult', val:1.05},
-      {n:'Fanter Lens', d:'+5% click', c:150000, effect:'clickMult', val:1.05}
+      {n:'Catnip Charm', d:'+2% click', c:18, effect:'clickMult', val:1.02, icon:'🌿'},
+      {n:'Milk Sigil', d:'+2% PPS', c:45, effect:'ppsMult', val:1.02, icon:'🥛'},
+      {n:'Whisker Relay', d:'+2% combo', c:110, effect:'comboBonus', val:1.02, icon:'🐱'},
+      {n:'Paw Catalyst', d:'+3% click', c:240, effect:'clickMult', val:1.03, icon:'🐾'},
+      {n:'Fur Furnace', d:'+2% PPS', c:520, effect:'ppsMult', val:1.02, icon:'🔥'},
+      {n:'Tuna Circuit', d:'+1% all', c:1100, effect:'globalMult', val:1.01, icon:'🐟'},
+      {n:'Moonwhisker', d:'+3% PPS', c:2600, effect:'ppsMult', val:1.03, icon:'🌙'},
+      {n:'Chonk Buffer', d:'+3% click', c:6200, effect:'clickMult', val:1.03, icon:'🍩'},
+      {n:'Claw Reactor', d:'+5% PPS', c:14000, effect:'ppsMult', val:1.05, icon:'⚡'},
+      {n:'Purr Coil', d:'+1 combo max', c:32000, effect:'extraCombo', val:1, icon:'🔩'},
+      {n:'Orange Halo', d:'+5% all', c:70000, effect:'globalMult', val:1.05, icon:'🍊'},
+      {n:'Fanter Lens', d:'+5% click', c:150000, effect:'clickMult', val:1.05, icon:'🔍'}
     ];
     
     let S = {
@@ -402,7 +403,7 @@
       requestAnimationFrame(gameLoop);
     }
     
-    // ========== RENDER FUNCTIONS WITH 67.png IMAGE ==========
+    // ========== RENDER FUNCTIONS - ONLY EYE DROPPER USES 67.png ==========
     
     function renderBuildings(){
       let container = document.getElementById('buildlist');
@@ -415,9 +416,16 @@
         card.className = 'card';
         if(owned>0) card.classList.add('owned');
         
-        // Each building card gets the 67.png image
+        // ONLY Eye Dropper (index 0) uses the custom 67.png image
+        let iconHtml = '';
+        if(i === 0 && b.customImage) {
+          iconHtml = `<div class="building-icon"><img src="67.png" alt="Eye Dropper"></div>`;
+        } else {
+          iconHtml = `<div class="building-icon">${b.icon}</div>`;
+        }
+        
         card.innerHTML = `
-          <div class="building-icon"><img src="67.png" alt="icon"></div>
+          ${iconHtml}
           <div class="card-info">
             <div class="name">${b.n} x${owned}</div>
             <div class="desc">${b.d}</div>
@@ -441,9 +449,9 @@
         if(owned) div.classList.add('owned');
         if(!owned && !canAfford) div.classList.add('locked');
         
-        // Each sub-upgrade card also gets the 67.png image
+        // Sub-upgrades keep their emoji icons (no 67.png)
         div.innerHTML = `
-          <div class="sub-icon"><img src="67.png" alt="icon"></div>
+          <div class="sub-icon">${u.icon}</div>
           <div class="sub-name">${u.n}</div>
           <div class="sub-cost">💰 ${fmt(u.c)}</div>
           <div style="font-size:9px; color:#59462f;">${u.d}</div>
@@ -464,7 +472,7 @@
         if(owned) div.classList.add('owned');
         if(!owned && !canAfford) div.classList.add('locked');
         div.innerHTML = `
-          <div class="sub-icon"><img src="67.png" alt="icon"></div>
+          <div class="sub-icon">${u.icon}</div>
           <div class="sub-name">${u.n}</div>
           <div class="sub-cost">💰 ${fmt(u.c)}</div>
           <div style="font-size:9px;">${u.d}</div>
