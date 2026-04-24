@@ -7,9 +7,9 @@
 <style>
 :root{
   --bg:#0d1a24;
-  --panel:#213241;
-  --panel2:#2d4152;
-  --panel3:#324d63;
+  --panel:#1e3240;
+  --panel2:#274152;
+  --panel3:#31526a;
   --blue:#2b5a7a;
   --blue2:#18354a;
   --wood:#8b5a2b;
@@ -19,13 +19,15 @@
   --cream:#f6ead7;
   --gold:#ffd56a;
   --gold2:#ffb84d;
+  --heaven:#7aa9d6;
+  --heaven2:#5f88b5;
   --shadow:0 10px 30px rgba(0,0,0,.42);
   --line:rgba(255,255,255,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;font-family:Georgia,'Times New Roman',serif;background:radial-gradient(circle at 50% 20%, #173345 0%, #0d1a24 56%, #081018 100%);color:var(--cream)}
 body{user-select:none}
-#game{display:grid;grid-template-columns:330px 1fr 360px;width:100%;height:100%}
+#game{display:grid;grid-template-columns:360px 1fr 360px;width:100%;height:100%}
 .panel{
   position:relative;overflow:hidden;
   background:
@@ -52,11 +54,7 @@ body{user-select:none}
 .header,.sidehead{padding:12px 14px}
 .header h1,.sidehead h2,#title{font-size:18px;font-weight:700;color:#fff;letter-spacing:.5px}
 .header .sub,.sidehead .sub,#label{font-size:11px;color:#f0e3cf;opacity:.92;margin-top:2px}
-#hud{
-  padding:10px 14px 8px;
-  text-align:center;
-  position:relative
-}
+#hud{padding:10px 14px 8px;text-align:center;position:relative}
 #title{font-size:22px}
 #count{font-size:36px;font-weight:700;color:#fff;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.5)}
 #stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:#e2d2bc}
@@ -85,6 +83,15 @@ body{user-select:none}
   margin-bottom:7px;font-size:11px
 }
 .lab{color:#f0e6d3}.val{color:#ffe08d;font-weight:700}
+#renameRow{display:flex;gap:6px;margin-bottom:8px}
+#bakeryName{
+  flex:1;border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.24);color:#fff;padding:8px 10px;font-size:11px
+}
+#renameBtn{
+  border:none;background:linear-gradient(180deg,#7a5a33,#342015);
+  color:#fff;font-weight:700;padding:8px 10px;cursor:pointer
+}
 #clickzone{
   position:relative;height:calc(100% - 100px);
   display:flex;align-items:center;justify-content:center;padding:12px
@@ -196,24 +203,37 @@ button.main{
 }
 button.main:hover{filter:brightness(1.08)}
 button.main:disabled{opacity:.45;cursor:not-allowed}
-#submodal{
+#submodal,#ascmodal{
   display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);
   backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center
 }
-#submodal.open{display:flex}
-#subbox{
-  width:min(820px,94vw);max-height:82vh;overflow:hidden;
+#submodal.open,#ascmodal.open{display:flex}
+#subbox,#ascbox{
+  width:min(900px,94vw);max-height:84vh;overflow:hidden;
   background:linear-gradient(180deg,#7a4f2c,#4c2e18);
   border:8px solid var(--wood);box-shadow:var(--shadow);display:flex;flex-direction:column
 }
-#subhead{
+#ascbox{
+  background:linear-gradient(180deg,#6f93bb,#3f658d);
+}
+#subhead,#ashead{
   padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.12);
   display:flex;justify-content:space-between;align-items:center;
   background:linear-gradient(180deg, rgba(0,0,0,.32), rgba(0,0,0,.12))
 }
-#subtitle{font-size:14px;color:#fff;font-weight:700}
-#subclose{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
-#sublist{padding:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow:auto}
+#subtitle,#astitle{font-size:14px;color:#fff;font-weight:700}
+#subclose,#asclose{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+#sublist{padding:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;overflow:auto}
+#astree{padding:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;overflow:auto}
+.node{
+  min-height:118px;position:relative;padding:10px;border:1px solid rgba(255,255,255,.16);
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,.16));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.node.locked{opacity:.38}
+.node h4{font-size:12px;color:#fff;margin-bottom:4px}
+.node p{font-size:10px;color:#f0e6d3;line-height:1.35}
+.node .price{font-size:10px;color:#ffe08d;font-weight:700;margin-top:6px}
 .toast{
   position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
   background:#2b1a10;border:1px solid #ffe08d;padding:8px 14px;
@@ -241,7 +261,7 @@ button.main:disabled{opacity:.45;cursor:not-allowed}
 }
 .tooltip{
   position:fixed;z-index:200;pointer-events:none;
-  min-width:180px;max-width:280px;
+  min-width:180px;max-width:300px;
   background:linear-gradient(180deg, rgba(20,12,8,.98), rgba(8,5,4,.98));
   border:1px solid rgba(255,213,106,.35);
   color:#f7ebd6;
@@ -253,6 +273,46 @@ button.main:disabled{opacity:.45;cursor:not-allowed}
 .tooltip.show{opacity:1;transform:translateY(0)}
 .tooltip .tname{font-weight:700;color:#ffe08d;margin-bottom:4px}
 .tooltip .tmeta{color:#cdb99f;margin-top:4px;font-size:10px;line-height:1.3}
+.icon{
+  width:34px;height:34px;flex:0 0 34px;margin-right:8px;position:relative;
+  border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)
+}
+.icon.blue{background:linear-gradient(180deg,#7ab0d7,#37658f)}
+.icon.orange{background:linear-gradient(180deg,#f0b15e,#9f5b1e)}
+.icon.gold{background:linear-gradient(180deg,#ffe08d,#c58a19)}
+.icon.heaven{background:linear-gradient(180deg,#bfe2ff,#6a97c8)}
+.icon::before,.icon::after{content:'';position:absolute}
+.icon.dropper::before{left:14px;top:4px;width:6px;height:18px;border-radius:6px;background:#e7f5ff;box-shadow:0 0 0 2px rgba(0,0,0,.12) inset}
+.icon.dropper::after{left:12px;top:19px;width:10px;height:10px;border-radius:50% 50% 55% 55%;background:#ffd56a;transform:rotate(45deg)}
+.icon.paw::before{left:8px;top:12px;width:18px;height:18px;border-radius:50%;background:#ffd8ad}
+.icon.paw::after{left:5px;top:4px;width:6px;height:6px;border-radius:50%;background:#ffd8ad;box-shadow:8px 0 0 #ffd8ad,16px 0 0 #ffd8ad,4px 8px 0 #ffd8ad}
+.icon.fang::before{left:8px;top:6px;width:16px;height:20px;background:linear-gradient(180deg,#fff,#ddd);clip-path:polygon(50% 100%,0 0,100% 0)}
+.icon.jug::before{left:9px;top:7px;width:16px;height:22px;border-radius:3px 3px 8px 8px;background:#b87944}
+.icon.jug::after{left:13px;top:2px;width:8px;height:8px;border:3px solid #b87944;border-bottom:none;border-radius:8px 8px 0 0}
+.icon.farm::before{left:7px;top:10px;width:20px;height:14px;border-radius:10px 10px 3px 3px;background:#5fa05f}
+.icon.farm::after{left:14px;top:4px;width:4px;height:12px;background:#7b5b2b;box-shadow:-4px 5px 0 0 #5fa05f,4px 5px 0 0 #5fa05f}
+.icon.mill::before{left:5px;top:5px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#bbb 0 18%,#777 19% 22%,#bbb 23% 32%,#777 33% 36%,#bbb 37% 100%)}
+.icon.oven::before{left:6px;top:8px;width:22px;height:18px;border-radius:4px;background:#d66c2a}
+.icon.oven::after{left:11px;top:12px;width:12px;height:8px;border-radius:50%;background:#ffd56a;box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+.icon.lab::before{left:10px;top:4px;width:14px;height:24px;border-radius:4px;background:#dff5ff;clip-path:polygon(30% 0,70% 0,70% 55%,100% 100%,0 100%,30% 55%)}
+.icon.vault::before{left:5px;top:5px;width:24px;height:24px;border-radius:50%;background:linear-gradient(180deg,#9b7d46,#5d4924);box-shadow:inset 0 0 0 3px rgba(255,255,255,.12)}
+.icon.portal::before{left:5px;top:5px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#9ef 0,#59a 35%,#112 75%)}
+.icon.portal::after{left:11px;top:11px;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.35)}
+.icon.star::before{left:8px;top:6px;width:18px;height:18px;background:#ffe08d;clip-path:polygon(50% 0,61% 34%,98% 35%,68% 57%,79% 92%,50% 72%,21% 92%,32% 57%,2% 35%,39% 34%)}
+.icon.core::before{left:5px;top:5px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#7ef 0,#3a8 35%,#143 80%)}
+.icon.quantum::before{left:6px;top:6px;width:22px;height:22px;border-radius:50%;background:conic-gradient(from 0deg,#fff,#7af,#fff,#f7a,#fff)}
+.icon.god::before{left:8px;top:4px;width:18px;height:24px;background:#ffd56a;clip-path:polygon(50% 0,61% 12%,78% 5%,75% 22%,92% 29%,76% 39%,83% 57%,67% 55%,64% 75%,50% 62%,36% 75%,33% 55%,17% 57%,24% 39%,8% 29%,25% 22%,22% 5%,39% 12%)}
+.icon.universe::before{left:5px;top:5px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#fff 0,#dde 10%,#66a 32%,#223 76%)}
+.icon.catnip::before{left:10px;top:7px;width:14px;height:18px;background:#68c06b;border-radius:50% 50% 40% 40%;transform:rotate(-18deg)}
+.icon.milk::before{left:8px;top:8px;width:18px;height:18px;background:#e7f4ff;border-radius:4px 4px 8px 8px;clip-path:polygon(20% 0,80% 0,100% 20%,100% 100%,0 100%,0 20%)}
+.icon.whisker::before{left:6px;top:16px;width:22px;height:3px;background:#d9c2a7;box-shadow:0 -5px 0 #d9c2a7,0 5px 0 #d9c2a7}
+.icon.buffer::before{left:7px;top:8px;width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg,#f8d08f,#9d6a34)}
+.icon.coil::before{left:8px;top:7px;width:18px;height:18px;border-radius:50%;border:4px solid #ffe08d;border-right-color:transparent;border-top-color:transparent;transform:rotate(45deg)}
+.icon.halo::before{left:8px;top:7px;width:18px;height:10px;border:3px solid #ffe08d;border-radius:50%}
+.icon.lens::before{left:7px;top:7px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,#fff 0,#bfe 35%,#7ad 70%)}
+.icon.fan{background:linear-gradient(180deg,#ffefd8,#e7b98a)}
+.icon.fan::before{left:12px;top:7px;width:12px;height:22px;background:#222;border-radius:10px}
+.icon.fan::after{left:7px;top:5px;width:22px;height:22px;border-radius:50%;background:conic-gradient(from 0deg,#ffefcc 0 20%,#d7a16f 20% 40%,#ffefcc 40% 60%,#d7a16f 60% 80%,#ffefcc 80% 100%)}
 canvas{position:fixed;inset:0;pointer-events:none}
 #grid{z-index:0;opacity:.08}
 #particles{z-index:10}
@@ -268,9 +328,6 @@ canvas{position:fixed;inset:0;pointer-events:none}
 </style>
 </head>
 <body>
-<canvas id="grid"></canvas>
-<canvas id="particles"></canvas>
-
 <div id="submodal">
   <div id="subbox">
     <div id="subhead">
@@ -281,17 +338,33 @@ canvas{position:fixed;inset:0;pointer-events:none}
   </div>
 </div>
 
+<div id="ascmodal">
+  <div id="ascbox">
+    <div id="ashead">
+      <div id="astitle">⭐ Ascension Tree</div>
+      <button id="asclose">✕</button>
+    </div>
+    <div id="astree"></div>
+  </div>
+</div>
+
 <div id="golden" title="Golden Fanter"></div>
 <div id="tooltip" class="tooltip"></div>
+<canvas id="grid"></canvas>
+<canvas id="particles"></canvas>
 
 <div id="game">
   <div id="left" class="panel wood">
     <div class="header">
-      <h1>Fanter's bakery</h1>
+      <h1 id="bakeryTitle">Fanter's bakery</h1>
       <div class="sub" id="leftSub">0 pints per second : 0</div>
     </div>
 
     <div id="infoTop">
+      <div id="renameRow">
+        <input id="bakeryName" maxlength="28" placeholder="Rename the bakery..." />
+        <button id="renameBtn">Rename</button>
+      </div>
       <div class="row"><div class="lab">Current Pints</div><div class="val" id="infoP">0</div></div>
       <div class="row"><div class="lab">Pints per Second</div><div class="val" id="infoPPS">0</div></div>
       <div class="row"><div class="lab">Per Click</div><div class="val" id="infoPPC">1</div></div>
@@ -303,7 +376,7 @@ canvas{position:fixed;inset:0;pointer-events:none}
         <div id="glow"></div>
         <div id="mood">😐 Fanter watches...</div>
         <div id="purrfect">Purrfect Timing x1</div>
-        <img id="fanter" src="https://www.image2url.com/r2/default/images/1776951558139-c4f34828-87ab-441f-b1df-8e035db4c14f.png" alt="Fanter Cat">
+        <img id="fanter" src="https://ih1.redbubble.net/image.2197409393.5460/pp,840x830-pad,1000x1000,f8f8f8.u1.jpg" alt="Fanter Cat">
       </div>
       <div id="combo">
         <div id="barbg"><div id="bar"></div></div>
@@ -338,13 +411,15 @@ canvas{position:fixed;inset:0;pointer-events:none}
       <div class="row"><div class="lab">Golden Fanter</div><div class="val" id="gfText">Waiting...</div></div>
       <div style="height:8px"></div>
       <div class="row"><div class="lab">Offline Earned</div><div class="val" id="offlineText">0</div></div>
+      <div style="height:8px"></div>
+      <button class="main" id="openAsc">⭐ Open Ascension Tree</button>
     </div>
   </div>
 
   <div id="right" class="panel wood">
     <div class="sidehead">
-      <h2>Store</h2>
-      <div class="sub">Cookie-style buildings</div>
+      <h2 id="storeTitle">Store</h2>
+      <div class="sub">Buildings, upgrades, and icons</div>
     </div>
 
     <div class="tabs">
@@ -387,46 +462,46 @@ canvas{position:fixed;inset:0;pointer-events:none}
 </div>
 
 <script>
-const STORE='FANTER_CLICKER_SAVE_V7';
+const STORE='FANTER_CLICKER_SAVE_V8';
 const el=id=>document.getElementById(id);
-const fanter=el('fanter'), mood=el('mood'), submodal=el('submodal'), golden=el('golden'), tooltip=el('tooltip');
+const fanter=el('fanter'), mood=el('mood'), submodal=el('submodal'), ascmodal=el('ascmodal'), golden=el('golden'), tooltip=el('tooltip');
 
 const buildings=[
-{n:'Eye Dropper',d:'Slowly drip pints.',c:15,p:0.1,icon:'🫙'},
-{n:'Paw Press',d:'Press pints from paws.',c:100,p:0.5,icon:'🐾'},
-{n:'Fang Tap',d:'Puncture a barrel of blood.',c:500,p:2,icon:'🧪'},
-{n:'Blood Jug',d:'Collect spilled pints.',c:2000,p:8,icon:'🪣'},
-{n:'Clot Farm',d:'Harvest coagulated pints.',c:8000,p:25,icon:'🌱'},
-{n:'Fanter Mill',d:'Grind fur for blood.',c:30000,p:80,icon:'⚙️'},
-{n:'Blood Oven',d:'Bake concentrated pints.',c:100000,p:250,icon:'🍞'},
-{n:'Cat Lab Alpha',d:'Scientific pint synthesis.',c:400000,p:700,icon:'🔬'},
-{n:'Pint Vault',d:'Pressurized extraction.',c:1500000,p:2000,icon:'🏦'},
-{n:'Fanter Portal',d:'Pints from another dimension.',c:6000000,p:6000,icon:'🌀'},
-{n:'Blood Star',d:'Stellar pint fusion.',c:25000000,p:18000,icon:'⭐'},
-{n:'Fanter Core',d:'Planetary blood extraction.',c:100000000,p:55000,icon:'🌍'},
-{n:'Quantum Pinter',d:'Quantum tunneling.',c:400000000,p:160000,icon:'🧬'},
-{n:'Blood God Shrine',d:'Offerings to the gods.',c:2000000000,p:500000,icon:'⛩️'},
-{n:'Fanter Universe',d:'Entire universes of pints.',c:10000000000,p:1600000,icon:'🌌'}
+{n:'Eye Dropper',d:'Slowly drip pints.',c:15,p:0.1,icon:'dropper'},
+{n:'Paw Press',d:'Press pints from paws.',c:100,p:0.5,icon:'paw'},
+{n:'Fang Tap',d:'Puncture a barrel of blood.',c:500,p:2,icon:'fang'},
+{n:'Blood Jug',d:'Collect spilled pints.',c:2000,p:8,icon:'jug'},
+{n:'Clot Farm',d:'Harvest coagulated pints.',c:8000,p:25,icon:'farm'},
+{n:'Fanter Mill',d:'Grind fur for blood.',c:30000,p:80,icon:'mill'},
+{n:'Blood Oven',d:'Bake concentrated pints.',c:100000,p:250,icon:'oven'},
+{n:'Cat Lab Alpha',d:'Scientific pint synthesis.',c:400000,p:700,icon:'lab'},
+{n:'Pint Vault',d:'Pressurized extraction.',c:1500000,p:2000,icon:'vault'},
+{n:'Fanter Portal',d:'Pints from another dimension.',c:6000000,p:6000,icon:'portal'},
+{n:'Blood Star',d:'Stellar pint fusion.',c:25000000,p:18000,icon:'star'},
+{n:'Fanter Core',d:'Planetary blood extraction.',c:100000000,p:55000,icon:'core'},
+{n:'Quantum Pinter',d:'Quantum tunneling.',c:400000000,p:160000,icon:'quantum'},
+{n:'Blood God Shrine',d:'Offerings to the gods.',c:2000000000,p:500000,icon:'god'},
+{n:'Fanter Universe',d:'Entire universes of pints.',c:10000000000,p:1600000,icon:'universe'}
 ];
 
 const subUpgrades=[
-{n:'Catnip Charm',d:'Increases click rhythm stability.',c:25,e:'+1% click gain'},
-{n:'Milk Sigil',d:'Boosts passive production.',c:60,e:'+1% PPS'},
-{n:'Whisker Relay',d:'Improves timing windows.',c:140,e:'+2% combo length'},
-{n:'Paw Catalyst',d:'Strengthens purr chains.',c:320,e:'+2% click gain'},
-{n:'Fur Furnace',d:'Warms production lines.',c:700,e:'+2% PPS'},
-{n:'Tuna Circuit',d:'Improves all cat systems.',c:1500,e:'+1% all income'},
-{n:'Moonwhisker Node',d:'Amplifies late-game power.',c:3500,e:'+3% PPS'},
-{n:'Chonk Buffer',d:'Makes gains heavier.',c:8000,e:'+3% click gain'},
-{n:'Claw Reactor',d:'High-output cat engine.',c:18000,e:'+5% PPS'},
-{n:'Purr Coil',d:'Extends Purrfect Timing.',c:40000,e:'+1 combo max'},
-{n:'Orange Halo',d:'Pure citrus power.',c:90000,e:'+5% all income'},
-{n:'Fanter Lens',d:'Sharpen the whole bakery.',c:200000,e:'+5% click gain'}
+{n:'Catnip Charm',d:'Increases click rhythm stability.',c:25,e:'+1% click gain',icon:'catnip'},
+{n:'Milk Sigil',d:'Boosts passive production.',c:60,e:'+1% PPS',icon:'milk'},
+{n:'Whisker Relay',d:'Improves timing windows.',c:140,e:'+2% combo length',icon:'whisker'},
+{n:'Paw Catalyst',d:'Strengthens purr chains.',c:320,e:'+2% click gain',icon:'paw'},
+{n:'Fur Furnace',d:'Warms production lines.',c:700,e:'+2% PPS',icon:'oven'},
+{n:'Tuna Circuit',d:'Improves all cat systems.',c:1500,e:'+1% all income',icon:'mill'},
+{n:'Moonwhisker Node',d:'Amplifies late-game power.',c:3500,e:'+3% PPS',icon:'star'},
+{n:'Chonk Buffer',d:'Makes gains heavier.',c:8000,e:'+3% click gain',icon:'buffer'},
+{n:'Claw Reactor',d:'High-output cat engine.',c:18000,e:'+5% PPS',icon:'core'},
+{n:'Purr Coil',d:'Extends Purrfect Timing.',c:40000,e:'+1 combo max',icon:'coil'},
+{n:'Orange Halo',d:'Pure citrus power.',c:90000,e:'+5% all income',icon:'halo'},
+{n:'Fanter Lens',d:'Sharpen the whole bakery.',c:200000,e:'+5% click gain',icon:'lens'}
 ];
 
 const mainUpgrades=[];
 const ppcNames=['Bloody Paw','Fanged Bite','Clawed Fury','Crimson Scratch','Pint Squeezer','Blood Fang','Iron Claw','Venom Strike','Gore Rake','Fanter Rage','Blood Surge','Scarlet Fist','Fanter Fist II','Pint Barrage','Hyper Claw','Crimson Nova','Void Scratch','Quantum Bite','Solar Fanter','Galaxy Claw'];
-for(let i=0;i<20;i++) mainUpgrades.push({type:'ppc',n:ppcNames[i],d:'Improves click power.',c:Math.round(10*Math.pow(1.7,i+1)),ppc:1+i});
+for(let i=0;i<20;i++) mainUpgrades.push({type:'ppc',n:ppcNames[i],d:'Improves click power.',c:Math.round(10*Math.pow(1.7,i+1)),ppc:1+i,icon:'fan'});
 let bi=0;
 for(const b of buildings){
   for(let lvl=1;lvl<=10;lvl++){
@@ -437,7 +512,8 @@ for(const b of buildings){
       c:Math.round(b.c*Math.pow(1.5,lvl-1)*Math.pow(1.08,bi)),
       p:Math.max(0.1,b.p*Math.pow(1.32,lvl-1)),
       building:b.n,
-      level:lvl
+      level:lvl,
+      icon:b.icon
     });
     if(mainUpgrades.length>=180) break;
   }
@@ -446,8 +522,22 @@ for(const b of buildings){
 }
 while(mainUpgrades.length<180){
   let i=mainUpgrades.length+1;
-  mainUpgrades.push({type:'pps',n:`Bonus Cat ${i}`,d:'Extra passive production.',c:Math.round(1000*Math.pow(1.45,i-20)),p:100+i,building:'Bonus',level:1});
+  mainUpgrades.push({type:'pps',n:`Bonus Cat ${i}`,d:'Extra passive production.',c:Math.round(1000*Math.pow(1.45,i-20)),p:100+i,building:'Bonus',level:1,icon:'star'});
 }
+
+const ascNodes=[
+{n:'Legacy',d:'Unlock ascension and heavenly chips.',p:'Start your heavenly tree.',cost:1,unlocked:true,kind:'core'},
+{n:'Heavenly Cookies',d:'+10% production permanently.',p:'Permanent income boost.',cost:3,req:0,kind:'heaven'},
+{n:'Permanent Slot I',d:'Keep one upgrade forever.',p:'First permanent slot.',cost:10,req:0,kind:'heaven'},
+{n:'Purrfect Memory',d:'Combo lasts longer after ascension.',p:'Boost Purrfect Timing.',cost:25,req:1,kind:'heaven'},
+{n:'Golden Fur',d:'Golden Fanters last longer.',p:'More event time.',cost:40,req:1,kind:'heaven'},
+{n:'Milk Blessing',d:'Milk and kitten power boost.',p:'Better late game scaling.',cost:60,req:1,kind:'heaven'},
+{n:'Season Switcher',d:'Keep season control between runs.',p:'Season utility.',cost:85,req:2,kind:'heaven'},
+{n:'Sub Slot',d:'Keep one sub-upgrade forever.',p:'Persistent sub-slot.',cost:120,req:2,kind:'heaven'},
+{n:'Build Mastery',d:'Buildings produce more after ascension.',p:'Stronger reset loop.',cost:170,req:3,kind:'heaven'},
+{n:'Celestial Bakery',d:'Unlock a heavenly bakery skin.',p:'Pure style.',cost:250,req:4,kind:'heaven'},
+{n:'Purrfect Ascension',d:'Big combo bonus after reset.',p:'Ascension synergy.',cost:400,req:5,kind:'heaven'}
+];
 
 const achData=[
 {i:'🥉',n:'First Pint',d:'Earn 100 pints',r:100},
@@ -472,24 +562,25 @@ const seasons=[
 let S={
   p:0,tp:0,c:0,ppc:1,pps:0,asc:0,pm:1,sl:0,sp:0,combo:0,cm:1,lastClick:0,
   owned:[],subOwned:[],l:Date.now(),buildCounts:Array(buildings.length).fill(0),
-  goldenBuff:0,goldenUntil:0,season:0,offlineEarned:0
+  goldenBuff:0,goldenUntil:0,season:0,offlineEarned:0,bakeryName:"Fanter's bakery",
+  ascOwned:[], ascUnlocked:false
 };
-let buyMode=1;
-let P=[];
+let buyMode=1, P=[];
 
 function save(){localStorage.setItem(STORE,JSON.stringify(S))}
 function load(){try{const x=JSON.parse(localStorage.getItem(STORE)||'null');if(x)S=Object.assign(S,x)}catch(e){}}
 function fmt(n){return n>=1e12?(n/1e12).toFixed(2)+'T':n>=1e9?(n/1e9).toFixed(2)+'B':n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':Math.floor(n).toString()}
 function seasonMult(){return seasons[S.season]?.mult||1}
-function ppc(){return S.ppc*S.pm*S.cm*seasonMult()*(S.goldenBuff===1?2:1)}
-function pps(){return (S.pps+S.sp)*S.pm*seasonMult()*(S.goldenBuff===2?3:1)}
+function ascMult(){return 1+S.asc*0.1}
+function ppc(){return S.ppc*S.pm*S.cm*seasonMult()*ascMult()*(S.goldenBuff===1?2:1)}
+function pps(){return (S.pps+S.sp)*S.pm*seasonMult()*ascMult()*(S.goldenBuff===2?3:1)}
 function totalOwnedBuildings(){return S.buildCounts.reduce((a,b)=>a+b,0)}
 function canSub(u){return S.p>=u.c*0.5}
 function canMain(u){return S.p>=u.c*0.75}
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2500)}
 
-function costForBuilding(i){return Math.floor(buildings[i].c*Math.pow(1.15,S.buildCounts[i])*Math.pow(1.01,S.asc))}
-function maxBuyableBuilding(i){let n=0,p=S.p;while(n<1000){const c=Math.floor(buildings[i].c*Math.pow(1.15,S.buildCounts[i]+n)*Math.pow(1.01,S.asc));if(p<c)break;p-=c;n++}return n}
+function costForBuilding(i){return Math.floor(buildings[i].c*Math.pow(1.15,S.buildCounts[i])*Math.pow(0.99,S.asc))}
+function maxBuyableBuilding(i){let n=0,p=S.p;while(n<1000){const c=Math.floor(buildings[i].c*Math.pow(1.15,S.buildCounts[i]+n)*Math.pow(0.99,S.asc));if(p<c)break;p-=c;n++}return n}
 function buyBuilding(i,amt){
   let bought=0;
   for(let k=0;k<amt;k++){
@@ -530,26 +621,29 @@ function buyMain(i){
   toast('Purchased '+u.n);
   updateAll();
 }
+function ascBuy(i){
+  const n=ascNodes[i];
+  if(!S.ascUnlocked || S.ascOwned.includes(i) || S.hc<n.cost) return;
+  S.hc-=n.cost; S.ascOwned.push(i); toast('Heavenly upgrade: '+n.n); updateAll();
+}
+
 function renderTooltip(title, body, meta){
   tooltip.innerHTML=`<div class="tname">${title}</div><div>${body}</div><div class="tmeta">${meta}</div>`;
   tooltip.classList.add('show');
 }
 function hideTooltip(){tooltip.classList.remove('show')}
 function setTipPos(e){
-  const pad=16;
-  const w=tooltip.offsetWidth||240;
-  const h=tooltip.offsetHeight||80;
+  const pad=16, w=tooltip.offsetWidth||240, h=tooltip.offsetHeight||80;
   let x=e.clientX+18,y=e.clientY+18;
   if(x+w>innerWidth-pad) x=innerWidth-w-pad;
   if(y+h>innerHeight-pad) y=innerHeight-h-pad;
-  tooltip.style.left=x+'px';
-  tooltip.style.top=y+'px';
+  tooltip.style.left=x+'px'; tooltip.style.top=y+'px';
 }
-function cardTip(elm,title,body,meta){
-  elm.addEventListener('mouseenter',e=>{renderTooltip(title,body,meta); setTipPos(e)});
-  elm.addEventListener('mousemove',setTipPos);
-  elm.addEventListener('mouseleave',hideTooltip);
-}
+function cardTip(elm,title,body,meta){elm.addEventListener('mouseenter',e=>{renderTooltip(title,body,meta);setTipPos(e)});elm.addEventListener('mousemove',setTipPos);elm.addEventListener('mouseleave',hideTooltip)}
+
+function iconClassForBuilding(b){return `icon ${b.icon} orange`}
+function iconClassForSub(u){return `icon ${u.icon} blue`}
+function iconClassForMain(u){return `icon ${u.icon} gold`}
 
 function renderBuildings(){
   const x=el('buildlist'); x.innerHTML='';
@@ -559,9 +653,11 @@ function renderBuildings(){
     if(!reveal) return;
     const d=document.createElement('div');
     d.className='card';
-    d.innerHTML=`<div class="name">${b.icon} ${b.n} <span style="opacity:.7">x${S.buildCounts[i]}</span></div><div class="desc">${b.d}</div><div class="cost">${fmt(cost)} Pints • +${fmt(b.p*Math.pow(1.08,S.buildCounts[i]))}/s</div>`;
+    const count=S.buildCounts[i];
+    const gain=b.p*Math.pow(1.08,count);
+    d.innerHTML=`<div style="display:flex;align-items:center"><div class="${iconClassForBuilding(b)}"></div><div style="flex:1"><div class="name">${b.n} <span style="opacity:.7">x${count}</span></div><div class="desc">${b.d}</div></div><div class="cost">${fmt(cost)} Pints</div></div><div class="desc" style="margin-top:6px">+${fmt(gain)}/s</div>`;
     d.onclick=()=>buyBuilding(i,buyMode===1?1:buyMode===10?Math.min(10,maxBuyableBuilding(i)):Math.min(100,maxBuyableBuilding(i)));
-    cardTip(d,b.n,b.d,`Cost: ${fmt(cost)} pints • Produces ${fmt(b.p*Math.pow(1.08,S.buildCounts[i]))}/s`);
+    cardTip(d,b.n,b.d,`Cost: ${fmt(cost)} pints • Produces ${fmt(gain)}/s`);
     x.appendChild(d);
   });
   if(!x.children.length) x.innerHTML='<div class="card locked"><div class="name">Locked</div><div class="desc">Reach 50% of a building cost to reveal it.</div></div>';
@@ -572,7 +668,7 @@ function renderMainUpgrades(){
     if(S.owned.includes(i) || !canMain(u)) return;
     const d=document.createElement('div');
     d.className='card';
-    d.innerHTML=`<div class="name">${u.n}</div><div class="desc">${u.d}</div><div class="cost">${fmt(u.c)} Pints</div>`;
+    d.innerHTML=`<div style="display:flex;align-items:center"><div class="${iconClassForMain(u)}"></div><div style="flex:1"><div class="name">${u.n}</div><div class="desc">${u.d}</div></div><div class="cost">${fmt(u.c)} Pints</div></div>`;
     d.onclick=()=>buyMain(i);
     cardTip(d,u.n,u.d,`Cost: ${fmt(u.c)} pints • ${u.type==='ppc'?`+${u.ppc} click power`:`+${fmt(u.p)} passive pints/s`}`);
     x.appendChild(d);
@@ -585,7 +681,7 @@ function renderSubPanel(){
     if(S.subOwned.includes(i) || !canSub(u)) return;
     const d=document.createElement('div');
     d.className='card';
-    d.innerHTML=`<div class="name">${u.n}</div><div class="desc">${u.d}</div><div class="cost">${fmt(u.c)} Pints</div>`;
+    d.innerHTML=`<div style="display:flex;align-items:center"><div class="${iconClassForSub(u)}"></div><div style="flex:1"><div class="name">${u.n}</div><div class="desc">Hover for details.</div></div></div>`;
     d.onclick=()=>buySub(i);
     cardTip(d,u.n,u.d,`Cost: ${fmt(u.c)} pints • ${u.e}`);
     x.appendChild(d);
@@ -598,12 +694,25 @@ function renderSubModal(){
     const ok=canSub(u);
     const d=document.createElement('div');
     d.className='card '+(S.subOwned.includes(i)?'owned':ok?'':'locked');
-    d.innerHTML=`<div class="name">${u.n}</div><div class="desc">${u.d}</div><div class="cost">${S.subOwned.includes(i)?'Owned':fmt(u.c)+' Pints'}</div>`;
+    d.innerHTML=`<div style="display:flex;align-items:center"><div class="${iconClassForSub(u)}"></div><div style="flex:1"><div class="name">${u.n}</div><div class="desc">${u.d}</div><div class="cost">${S.subOwned.includes(i)?'Owned':fmt(u.c)+' Pints'}</div></div></div>`;
     if(ok&&!S.subOwned.includes(i)) d.onclick=()=>buySub(i);
     cardTip(d,u.n,u.d,`Cost: ${fmt(u.c)} pints • ${u.e}`);
     x.appendChild(d);
   });
 }
+function renderAsc(){
+  const x=el('astree'); x.innerHTML='';
+  ascNodes.forEach((a,i)=>{
+    const ok=i===0 ? true : S.hc>=a.cost && S.ascOwned.includes(i-1);
+    const d=document.createElement('div');
+    d.className='node '+((i===0||S.ascOwned.includes(i))?'':'locked');
+    d.innerHTML=`<h4>${a.n}</h4><p>${a.d}</p><div class="price">${i===0?'Free core':fmt(a.cost)+' chips'}</div>`;
+    if((i===0 || (S.ascOwned.includes(a.req) || i===0)) && (i===0 || !S.ascOwned.includes(i)) && S.hc>=a.cost) d.onclick=()=>ascBuy(i);
+    cardTip(d,a.n,a.d,`Heavenly cost: ${fmt(a.cost)} chips`);
+    x.appendChild(d);
+  });
+}
+
 function renderAch(){
   const x=el('ach'); x.innerHTML='';
   achData.forEach(a=>{
@@ -644,6 +753,8 @@ function updateHUD(){
   el('infoPPS').textContent=fmt(pps());
   el('infoPPC').textContent=fmt(ppc());
   el('infoRank').textContent=el('rank').textContent;
+  el('bakeryTitle').textContent=S.bakeryName;
+  el('storeTitle').textContent='Store';
   el('seasonTag').textContent=seasons[S.season].tag;
   el('buffText').textContent=S.goldenBuff===1?'Frenzy x2 clicks':S.goldenBuff===2?'Building Rush x3 passive':'None';
   el('gfText').textContent=S.goldenUntil>Date.now()?'Active':'Waiting...';
@@ -652,7 +763,8 @@ function updateHUD(){
   el('purrfect').classList.toggle('active', activePurr);
   el('purrfect').textContent = activePurr ? `Purrfect Timing x${S.combo}` : `Purrfect Timing`;
 }
-function updateAll(){renderBuildings();renderMainUpgrades();renderSubPanel();renderSubModal();renderAch();renderStats();updateHUD();save()}
+
+function updateAll(){renderBuildings();renderMainUpgrades();renderSubPanel();renderSubModal();renderAch();renderStats();renderAsc();updateHUD();save()}
 function clickFanter(e){
   S.c++;S.combo=Math.min(20,S.combo+1);S.cm=1+S.combo*.05;
   const gain=Math.max(1,Math.floor(ppc()));
@@ -663,16 +775,18 @@ function clickFanter(e){
 }
 function ascension(){
   if(S.tp<1e9) return;
-  const keepSp = Math.max(0,Math.floor(S.sp*.25));
+  const chips=Math.max(1,Math.floor(Math.sqrt(S.tp/1e9)));
+  S.hc=(S.hc||0)+chips;
   S.p=0;S.ppc=1;S.pps=0;S.combo=0;S.cm=1;S.asc++;
-  S.pm=1+S.asc*.1;S.owned=[];S.subOwned=[];S.sp=keepSp;S.sl=0;
+  S.pm=1+S.asc*.1;S.owned=[];S.subOwned=[];S.sp=Math.max(0,Math.floor(S.sp*.25));S.sl=0;
   S.buildCounts=Array(buildings.length).fill(0);
   S.goldenBuff=0;S.goldenUntil=0;S.season=(S.season+1)%seasons.length;
-  toast('Ascended!');updateAll();
+  S.ascUnlocked=true;
+  toast(`Ascended! +${chips} chips`);
+  updateAll();
 }
 function loadElapsed(){
-  const now=Date.now();
-  const diff=Math.max(0,Math.floor((now-S.l)/1000));
+  const now=Date.now(), diff=Math.max(0,Math.floor((now-S.l)/1000));
   if(diff>0){
     const cap = Math.min(diff, 86400);
     const earned = pps()*cap;
@@ -690,19 +804,13 @@ function drawGrid(){
   for(let y=0;y<gc.height;y+=40){gctx.beginPath();gctx.moveTo(0,y);gctx.lineTo(gc.width,y);gctx.stroke()}
 }
 function burst(x,y){for(let i=0;i<12;i++)P.push({x,y,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7,r:2+Math.random()*3,a:1})}
-function anim(){
-  ctx.clearRect(0,0,pc.width,pc.height);
-  P=P.filter(p=>p.a>.03);
-  P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.a*=.95;ctx.fillStyle=`rgba(255,220,150,${p.a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});
-  requestAnimationFrame(anim);
-}
+function anim(){ctx.clearRect(0,0,pc.width,pc.height);P=P.filter(p=>p.a>.03);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.a*=.95;ctx.fillStyle=`rgba(255,220,150,${p.a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});requestAnimationFrame(anim)}
 function showGolden(){
-  const wrap=el('fanterwrap');
-  const r=wrap.getBoundingClientRect();
+  const wrap=el('fanterwrap'), r=wrap.getBoundingClientRect();
   golden.style.left=(r.left + Math.random()*(r.width-80))+'px';
   golden.style.top=(r.top + Math.random()*(r.height-80))+'px';
   golden.classList.add('show');
-  setTimeout(()=>{golden.classList.remove('show')}, 9000);
+  setTimeout(()=>golden.classList.remove('show'), 9000);
 }
 function triggerGoldenReward(){
   if(Math.random()<0.5){S.goldenBuff=1;S.goldenUntil=Date.now()+15000;toast('Golden Fanter: Frenzy!')}
@@ -726,10 +834,19 @@ window.addEventListener('resize',()=>{resize();drawGrid()});
 
 fanter.addEventListener('click',clickFanter);
 el('ascend').onclick=ascension;
+el('openAsc').onclick=()=>ascmodal.classList.add('open');
 el('subopen').onclick=()=>{submodal.classList.add('open');renderSubModal()};
 el('subclose').onclick=()=>submodal.classList.remove('open');
+el('asclose').onclick=()=>ascmodal.classList.remove('open');
 submodal.addEventListener('click',e=>{if(e.target.id==='submodal') submodal.classList.remove('open')});
+ascmodal.addEventListener('click',e=>{if(e.target.id==='ascmodal') ascmodal.classList.remove('open')});
 golden.addEventListener('click',()=>{triggerGoldenReward();golden.classList.remove('show')});
+
+el('renameBtn').onclick=()=>{
+  const v=el('bakeryName').value.trim();
+  if(v){S.bakeryName=v; el('bakeryName').value=''; updateAll(); toast('Bakery renamed');}
+};
+el('bakeryName').addEventListener('keydown',e=>{if(e.key==='Enter') el('renameBtn').click()});
 
 document.querySelectorAll('.tabbtn').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active'));
@@ -742,7 +859,7 @@ document.querySelectorAll('.buybtn').forEach(b=>b.onclick=()=>{
   b.classList.add('active');
   buyMode=parseInt(b.dataset.buy,10);
 });
-el('ticker').textContent='Fanter Clicker is loaded: Cookie-style buildings, tooltips, Purrfect Timing, Golden Fanters, seasons, prestige, offline progress, and a blue/orange textured UI are active.';
+el('ticker').textContent='Fanter Clicker is loaded: Cookie-style buildings, icon-based upgrades, tooltips, sub-upgrades, ascension tree, bakery rename, seasons, and the new Fanter image are active.';
 </script>
 </body>
 </html>
